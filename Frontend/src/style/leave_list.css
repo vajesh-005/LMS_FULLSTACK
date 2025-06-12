@@ -1,0 +1,33 @@
+
+.main-container::-webkit-scrollbar {
+  width: 8px;
+}
+
+.main-container::-webkit-scrollbar-track {
+  background: #252323;
+  border-radius: 6px;
+}
+
+.main-container::-webkit-scrollbar-thumb {
+  background-color: #615fff;
+  border-radius: 6px;
+}
+
+.main-container::-webkit-scrollbar-thumb:hover {
+  background: #8d26e2;
+}
+.leave-list-title{
+  text-align: center;
+  color: #615fff;
+}
+.main-container{
+  overflow-y: scroll;
+}
+.rules-div {
+  height: auto;
+  width: 100%;
+  color: #c8c5c5;
+}
+.rules {
+  width: 80%;
+}

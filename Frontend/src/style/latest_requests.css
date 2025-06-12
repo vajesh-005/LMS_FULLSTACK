@@ -1,0 +1,199 @@
+body {
+  background-color: #020203;
+
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+}
+.title {
+  font-size: 20px;
+  color: #615fff;
+  font-weight: 600;
+margin: 20px;
+}
+.pending-section {
+  width: auto;
+  min-width: 350px;
+  max-width: 350px;
+  max-height: 434px;
+  overflow-y: scroll;
+  /* background-color: #020203; */
+  color: white;
+  border: 1.5px solid #26262d;
+  border-radius: 5px;
+}
+.pending-section::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+.pending-section::-webkit-scrollbar-track {
+  background-color: #020203;
+  margin: 10px;
+}
+.pending-section::-webkit-scrollbar-thumb {
+  background-color: #615fff;
+  border-radius: 5px;
+}
+.pending-request-card {
+  border-bottom: 1px solid #26262d;
+  padding: 10px;
+  margin: 15px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+.leave-type-and-status {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+}
+.date-and-days {
+  display: flex;
+  justify-content: space-between;
+}
+.leave-name {
+  font-size: 15px;
+  color: #615fff;
+  display: flex;
+  gap: 5px;
+  align-items: center;
+  justify-content: center;
+}
+.rs-modal-content {
+  color: #ccc;
+  background-color: #1c1c20;
+  box-shadow: 0 4px 22px rgba(125, 122, 122, 0.3),
+    0 2px 4px rgba(125, 122, 122, 0.2);
+}
+.rs-modal-title {
+  color: #615fff;
+}
+.rs-steps-item {
+  margin: 0;
+}
+.rs-steps-item-icon-wrapper {
+  height: 20px;
+  width: 20px;
+  border-color: #615fff !important;
+}
+.rs-steps-item-tail {
+  padding: 0;
+}
+.rs-steps-item-content {
+  margin-left: -10px;
+}
+
+.rs-steps-item-status-finish,.rs-steps-item-title:after{
+    border-color: #615fff !important;
+}
+.small-steps .rs-steps-item-title {
+  font-size: 14px;
+}
+.rs-steps-item-title div p {
+  margin: 0;
+}
+
+.small-steps .rs-steps-item-description {
+  font-size: 11px;
+}
+.rs-icon{
+    color: #615fff;
+}
+
+.steps-role {
+  font-size: 8px;
+}
+.rs-steps-item-title{margin-top: -5px;
+}
+.rs-steps-item-status-finish>.rs-steps-item-content>.rs-steps-item-title>div>p{
+    color: white ;
+}
+.rs-steps-item-status-finish>.rs-steps-item-content>.rs-steps-item-description{
+    color: white ;
+}
+.rs-steps-item-status-process>.rs-steps-item-content>.rs-steps-item-title>div>p{
+    color: rgba(255, 255, 255, 0.29) ;
+}
+.rs-steps-item-status-process>.rs-steps-item-content>.rs-steps-item-description{
+    color: rgba(255, 255, 255, 0.29) ;
+}
+
+.rs-btn{
+    background-color: #615fff;
+}
+.main-modal{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+.modal-flex-body {
+  display: flex;
+  justify-content: space-around;
+  gap: 20px;
+}
+
+.truncated-text {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: inline-block;
+    max-width: 100px;
+    vertical-align: bottom;
+  }
+  
+.menu-icon {
+  background: transparent;
+  color: white;
+  font-size: 1rem;
+  margin: 0;
+}
+.rs-btn-subtle{
+    background-color: #ccc;
+}
+.cancel-btn{
+    background-color: rgba(255, 0, 0, 0.636);
+}
+.cancel-btn:hover{
+    background-color: red;
+}
+.pending {
+  background-color: #27200f;
+  border-radius: 15px 15px;
+  padding: 5px;
+  font-size: small;
+  color: #ffb900;
+  font-weight: 500;
+}
+.approved {
+  background-color: #0d201b;
+  border-radius: 15px 15px;
+  padding: 5px;
+  font-size: small;
+  color: #00d492;
+  font-weight: 500;
+}
+.rejected {
+  background-color: #261114;
+  border-radius: 15px 15px;
+  padding: 5px;
+  font-size: small;
+  color: #f66164;
+  font-weight: 500;
+}
+.cancelled {
+  background-color: #202023;
+  border-radius: 15px 15px;
+  padding: 5px;
+  font-size: small;
+  color: #f4f4f4;
+  font-weight: 500;
+}
+.date {
+  font-size: 12px;
+  color: #bcc1c9;
+  font-family: "Courier New", Courier, monospace;
+}
+.date-difference {
+  font-size: 10px;
+  margin-top: 7px;
+  color: #63686f;
+}

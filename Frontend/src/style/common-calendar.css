@@ -1,0 +1,72 @@
+.calendar-container{
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.common-calendar , .rbc-calendar{
+    height: 90%;
+    width: 80%;
+    /* padding: 10px 20px; */
+}
+.btn-div{
+    display: flex;
+    gap: 10px;
+}
+.common-calendar-btn , .team-calendar-btn{
+    padding: 10px 20px;
+    background-color: transparent;
+    color: white;
+    border: 1.5px solid #262626;
+    border-radius: 5px;
+}
+.calendar-container h2{
+    color: #615fff;
+}
+.rbc-btn-group button{
+    color: whitesmoke !important;
+}
+.rbc-btn-group button:hover{
+    color: #615fff !important;
+    background-color: rgba(240, 248, 255, 0.823);
+}
+.rbc-btn-group button:focus{
+    color: #615fff !important;
+}
+.rbc-toolbar-label{
+    color: #fff;
+}
+.rbc-header span{
+    color: rgba(255, 255, 255, 0.744) !important;
+}
+.rbc-header{
+    border-bottom: 1px solid #ffffff8d;
+}
+.rbc-month-view{
+    border:none !important;
+    border-radius: 5px;
+    background-color: #262626;
+}
+.rbc-month-row + .rbc-month-row{
+border-top: 1px solid #000 !important;
+}
+.rbc-day-bg + .rbc-day-bg{
+    border-left: 1px solid #000 !important;
+}
+ .rbc-off-range-bg{
+background-color: #ffffff33;
+}
+.rbc-button-link{
+    color: white;
+}
+.rbc-current button{
+    color: #615fff; 
+    text-decoration: underline; 
+}
+.rbc-today{
+    background-color: #625fff2f;
+    border-radius: 5px;
+}
+.rbc-off-range-bg{
+    background-color: #413c3c77;
+}

@@ -1,0 +1,81 @@
+.logo {
+  width: 120px;
+  height: auto;
+}
+.lumel-logo {
+  width: 100%;
+  height: 100%;
+  cursor:not-allowed;
+}
+.sidebar {
+  width: 180px;
+  height: 90%;
+  background-color: #1c1c20;
+  border-radius: 5px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-around;
+}
+.options {
+  width: 100%;
+  height: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 15px;
+}
+.item{
+    width: 100%;
+    height: 100%;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+    border-radius: 2px;
+    padding: 1px;
+    text-decoration: none;
+}
+.item:hover{
+    background-color: #424245;
+    cursor: pointer;
+    text-decoration: none;
+    color: #615fff;
+}
+.item:focus{
+  text-decoration: none;
+  color: #615fff;
+}
+/* .Dashboard-icon{
+    color: red;
+}
+.Leavelist-icon{
+    color: green;
+}
+.Calendar-icon{
+    color:rgb(145, 59, 145);
+}
+.Requests-icon{
+  color:orange;
+}
+.Employees-icon{
+  color: blue;
+} */
+.logout{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.logout-btn{
+    background-color: transparent;
+    color: rgb(171, 166, 166);
+}
+.logout-icon{
+    color: #615fff;
+}
+.active{
+  border-left: 4px solid #615fff;
+  color: #615fff;
+}

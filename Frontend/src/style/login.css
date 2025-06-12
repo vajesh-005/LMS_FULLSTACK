@@ -1,0 +1,67 @@
+
+.login-form{
+    height: 100vh;
+    width: 100vw;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+.login-form-div{
+    height: auto;
+    width: auto;
+    /* background-color: #1d1d1e; */
+    color: white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    padding: 40px;
+    border-radius: 20px;
+}
+.email , .password{
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+#email-input , #password-input{
+    background-color: transparent;
+    border : 1.5px solid #696b70;
+    border-radius: 5px;
+    padding: 10px 20px;
+    color: white;
+}
+.login-title{
+    font-size: 25px;
+    color:#615fff ;
+    font-weight: 500;
+}
+#email-input:focus , #password-input:focus{
+    border: 1.5px solid #615fff;
+    animation: borderAnimation 0.5s ease-in-out;
+    outline: none;
+}
+
+@keyframes borderAnimation{
+    0%{
+        border-color: #26262D;
+    }
+    100%{
+        border-color: #615fff;
+    }
+}
+.button-div{
+    width: 100%;  
+}
+.button{
+    padding: 10px 15px;
+    width: 100%;
+    background-color: green;
+    border-radius: 5px;
+    font-size: 15px;
+}
+.button:hover{
+background-color: rgb(7, 207, 7);
+}
+    

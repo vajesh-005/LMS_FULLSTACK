@@ -1,0 +1,107 @@
+.range-wrapper{
+    width: 270px;
+    height: 300px;
+}
+.rdrCalendarWrapper{
+    width: 100%;
+    height: 100%;
+} 
+
+.rdrMonth{
+    width: 100%;
+    padding: 0;
+}
+  .rdrCalendarWrapper {
+    background-color: #1c1c20 ;
+    border-radius: 5px;
+  }
+  .rdrDateDisplayWrapper{
+    background-color: #1c1c20;
+    border-radius: 5px;
+
+  }
+  .rdrDateDisplay{
+    display: flex;
+    padding: 0;
+    margin: 10px;
+    margin-right: 20px;
+  }
+  .rdrDateInput {
+    background-color: transparent;
+    border: none;
+  }
+  .rdrMonthAndYearWrapper{
+    padding: 0;
+  }
+  .rdrDateInput input{
+    border-radius: 5px;
+    border: 1px solid #6d6969;
+
+  }
+  .rdrDateInput input:hover {
+    border: 1.5px solid #615fff;
+  }
+  .rdrDateInput input:focus{
+    border: 1.5px solid #615fff;
+  }
+  .rdrMonthPicker select , .rdrYearPicker select {
+    width: auto;
+    min-width: 70px;
+    color:#ccc;
+    font-weight: 500;
+    font-size: 15px;
+    padding: 2px;
+    background-color:black ;
+  }
+  .rdrMonthPicker select:hover , .rdrYearPicker select:hover{
+    background-color:black ;
+  }
+  .rdrWeekDay{
+    color: #615fff;
+  }
+  .rdrDayNumber span{
+    color: white ;
+  }
+  .rdrDayPassive .rdrDayNumber span{
+    color: #6d6969;
+  }
+  .rdrDayHovered span{
+    border-color: #615fff;
+  }
+
+  .rdrDay .rdrStartEdge ,.rdrEndEdge  {
+    background-color:#615fff ;
+    /* border-radius: 5px; */
+  }
+  .rdrDay{
+    height: 1.8rem;
+  }
+  .rdrNextPrevButton{
+    background: transparent !important;
+  }
+  .rdrNextPrevButton{
+    color: white !important;
+  }
+  .rdrInRange{
+    background-color: #4e4ca3;
+  }
+  .rdrDay span{
+    border-color: #615fff;
+  }
+
+  .rdrDayToday .rdrDayNumber span:after{
+    background-color: #615fff;
+    position: absolute;
+    bottom: 1.5px;
+    left: 50%;
+  }
+  
+  .rdrNextPrevButton {
+    background-color: #b3b1b1;
+  }
+.rdrDayDisabled {
+    background-color: #1c1c20;
+}
+.rdrDayDisabled .rdrDayNumber span{
+    color: #626060;
+}

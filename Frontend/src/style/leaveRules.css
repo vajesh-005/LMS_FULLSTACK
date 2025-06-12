@@ -1,0 +1,17 @@
+.download-btn {
+  padding: 10px 20px;
+  font-size: 16px;
+  background-color: #615fff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.rules-div{
+  display: flex;
+  justify-content: flex-end;
+}
+.rules-div div{
+  width: 270px;
+}

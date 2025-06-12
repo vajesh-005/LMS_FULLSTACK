@@ -1,0 +1,158 @@
+.form {
+  height: auto;
+  height: 350px;
+  width: auto;
+  min-width: 350px;
+  border: 1.5px solid #26262d;
+  border-radius: 5px;
+}
+.request-form {
+  display: flex;
+  justify-content: space-around;
+  height: 100%;
+}
+
+.request-form-column{
+display: flex;
+flex: 2.5;
+flex-direction: column;
+align-items: center;
+justify-content: center;
+gap: 10px;
+margin: 5px;
+}
+.request-form-column-2{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  flex: 2.5;
+  border-left: 1.5px solid #26262d;
+  margin: 5px;
+  gap: 20px;
+}
+.leave-request-title {
+  color: #615fff;
+  font-weight: 600;
+  font-size: 20px;
+}
+.dates {
+  display: flex;
+  justify-content: space-between;
+
+}
+.date {
+  display: flex;
+  flex-direction: column;
+}
+.date label {
+  font-family: Arial, Helvetica, sans-serif;
+  color: #898d93;
+}
+#start-date,
+#end-date {
+  padding: 10px 20px;
+  background-color: transparent;
+  color: #bcc1c9;
+  border: 1.5px solid #26262d;
+  border-radius: 5px;
+  outline: none;
+}
+input[type="date"]::-webkit-calendar-picker-indicator {
+  background-color: #615fff;
+  border-radius: 5px;
+  padding: 5px;
+  font-family: Arial, Helvetica, sans-serif;
+}
+#start-date:hover,
+#end-date:hover,
+.reason textarea:hover,
+.dropdown-menu:hover {
+  border-color: #615fff;
+  animation: borderAnimation 0.5s ease-in-out;
+}
+#start-date:focus,
+#end-date:focus {
+  border-color: #615fff;
+  margin: 2px;
+}
+@keyframes borderAnimation {
+  0% {
+    border-color: #26262d;
+  }
+  100% {
+    border-color: #615fff;
+  }
+}
+.leave-type {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: #fff;
+  gap: 10px;
+
+}
+.leave-type-title , .reason-title {
+  color: #615fff;
+  font-size: 20px;
+  font-weight: 700;
+  width: 90%;
+}
+.dropdown-menu{
+  width: 90%;
+  background-color: transparent;
+  padding: 10px 20px;
+  border: 1.5px solid #898d93;
+  border-radius: 5px;
+}
+
+.dropdown-menu:focus{
+  border-color:#615fff ;
+  outline: none;
+}
+.dropdown-options{
+  background-color: #26262d;
+}
+.dropdown-options:hover{
+  background-color: #615fff !important;
+}
+
+
+
+.reason {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 10px;
+  gap: 10px;
+}
+
+.reason-textarea {
+  background-color: transparent;
+  border-radius: 5px;
+  color: white;
+  font-family: Arial, Helvetica, sans-serif;
+  height: 80px;
+  width: 90%;
+  outline: none;
+}
+.reason-textarea:focus{
+  border: 2px solid #615fff;
+}
+
+.submit-button-div {
+display: flex;
+justify-content: flex-end;
+margin-right: 15px;
+}
+.submit-btn{
+  background-color: #28a745 !important;
+  border-radius: 5px;
+  border: 2px solid green;
+}
+
+.submit-button-text {
+  margin: 0;
+  padding: 10px;
+  color: white;
+}

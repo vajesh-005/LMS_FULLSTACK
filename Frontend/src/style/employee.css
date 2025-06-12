@@ -1,0 +1,57 @@
+.hr-header-content,
+.employees-header-content {
+  width: 95%;
+  padding: 10px;
+  border: 1.5px solid #262626;
+  border-radius: 5px;
+}
+.hr-header-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.employees-header-content {
+  display: flex;
+  justify-content: flex-start;
+}
+.total-employees {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #615fff;
+}
+.total-employees-count {
+  font-weight: 300;
+  color: rgb(180, 175, 175);
+}
+.add-employee button {
+  padding: 10px 20px;
+  background-color: #615fff;
+  color: white;
+  border-radius: 5px;
+}
+.search-container {
+  display: flex;
+  justify-content: center;
+}
+.search-bar {
+  background: transparent;
+  border: 1.5px solid #262626;
+  padding: 10px;
+  border-radius: 5px;
+}
+.rs-input-group-addon {
+  background-color: #262626;
+  cursor: pointer;
+}
+
+.rs-input {
+  background-color: #2626264e;
+  color: whitesmoke;
+}
+.rs-input-group {
+  border-color: #262626;
+}
+.rs-input-group:hover , .rs-input-group:focus {
+  border-color: #615fff;
+}
+
