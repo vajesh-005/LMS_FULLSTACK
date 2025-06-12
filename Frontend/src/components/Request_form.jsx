@@ -140,6 +140,7 @@ function Request_form(props) {
           </Message>,
           { placement: "topEnd" }
         );
+        props.onSuccess?.();
       }
     } catch (error) {
       toaster.push(
@@ -149,7 +150,7 @@ function Request_form(props) {
         { placement: "topEnd" }
       );
     } finally {
-      setTimeout(() => setIsSubmitting(false), 3000);
+      setTimeout(() => setIsSubmitting(false), 1500);
     }
   };
 

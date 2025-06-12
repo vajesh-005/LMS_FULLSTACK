@@ -9,12 +9,29 @@ import Side_nav from "../Side_nav";
 
 const localizer = momentLocalizer(moment);
 const COLORS = {
-  holiday: "#d9534f",
-  floater: "#9c27b0",
-  "Week Off": "#6c757d",
-  self: "#4caf50",
-  peer: "#2196f3",
+  holiday: {
+    backgroundColor: "#f9d7d6", // deeper blush
+    color: "#d32f2f",            // darker red
+  },
+  floater: {
+    backgroundColor: "#f3d6f7", // richer lavender
+    color: "#7b1fa2",            // deeper purple
+  },
+  "Week Off": {
+    backgroundColor: "#dce1e6", // muted gray-blue
+    color: "#495057",            // strong slate
+  },
+  self: {
+    backgroundColor: "#d2f0d9", // deeper mint
+    color: "#388e3c",            // stronger green
+  },
+  peer: {
+    backgroundColor: "#c9e3fc", // bold sky blue tint
+    color: "#1565c0",            // deep blue
+  },
 };
+
+
 
 export default function CalendarView() {
   const { decode, token } = Token();
@@ -51,12 +68,21 @@ export default function CalendarView() {
     fetchCommon();
   }, [date, decode.id, token]);
 
-  const eventStyleGetter = (event) => ({
-    style: {
-      backgroundColor: COLORS[event.category] || COLORS[event.type] || "#999",
-      color: "white",
-    },
-  });
+  const eventStyleGetter = (event) => {
+    const colorInfo = COLORS[event.category] || COLORS[event.type];
+  
+    return {
+      style: {
+        backgroundColor: colorInfo?.backgroundColor || "#e0e0e0", 
+        color: colorInfo?.color || "#333", 
+        border: `1px solid ${colorInfo?.color || "#999"}`,
+        borderRadius: "5px",
+        fontWeight: 500,
+        padding: "2px 6px",
+      },
+    };
+  };
+  
 
   const dayPropGetter = (date) =>
     [0, 6].includes(moment(date).day())
@@ -73,7 +99,8 @@ export default function CalendarView() {
           onClick={() => setViewMode("common")}
           style={{
             fontWeight: viewMode === "common" ? "bold" : "normal",
-            backgroundColor: viewMode==="common" ? "#262626" : "transparent"
+            backgroundColor: viewMode==="common" ? "#1b263b" : "transparent",
+            color: viewMode==="common"? "white" : "#1b263b"
           }}
         >
           Common Calendar
@@ -83,7 +110,8 @@ export default function CalendarView() {
           onClick={() => setViewMode("team")}
           style={{
             fontWeight: viewMode === "team" ? "bold" : "normal",
-            backgroundColor: viewMode==="team" ? "#262626" : "transparent"
+            backgroundColor: viewMode==="team" ? "#1b263b" : "transparent",
+            color: viewMode==="team"? "white" : "#1b263b"
           }}
         >
           Team Calendar

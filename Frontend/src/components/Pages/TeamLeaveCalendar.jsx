@@ -4,7 +4,21 @@ import { Calendar as BigCalendar, momentLocalizer } from "react-big-calendar";
 import "react-big-calendar/lib/css/react-big-calendar.css";
 
 const localizer = momentLocalizer(moment);
-const COLORS = { peer: "#2196f3", self: "#4caf50", "Week Off": "#6c757d" };
+const COLORS = {
+  peer: {
+    backgroundColor: "#d2e9fb", // soft blue background
+    color: "#1565c0",           // darker blue
+  },
+  self: {
+    backgroundColor: "#d4f5dc", // soft green background
+    color: "#2e7d32",           // deeper green
+  },
+  "Week Off": {
+    backgroundColor: "#e6e9ec", // soft gray background
+    color: "#495057",           // darker gray
+  },
+};
+
 
 export default function TeamLeaveCalendar({
   date,
@@ -74,12 +88,25 @@ export default function TeamLeaveCalendar({
     fetchTeamLeaves();
   }, [date, user.id, token]);
 
-  const eventStyleGetter = (event) => ({
-    style: {
-      backgroundColor: COLORS[event.category] || "#ccc",
-      color: "white",
-    },
-  });
+  const eventStyleGetter = (event) => {
+    const colorConfig = COLORS[event.category] || {
+      backgroundColor: "#ccc",
+      color: "#333",
+    };
+  
+    return {
+      style: {
+        backgroundColor: colorConfig.backgroundColor,
+        color: colorConfig.color,
+        border: `1px solid ${colorConfig.color}`,
+        borderRadius: "5px",
+        padding: "2px 6px",
+        fontSize: "0.85rem",
+        fontWeight: 500,
+      },
+    };
+  };
+  
 
   return (
     <BigCalendar

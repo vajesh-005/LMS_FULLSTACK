@@ -33,10 +33,10 @@ function RangeCalendar({ startDate, endDate, onDateChange = () => {} }) {
         ranges={range}
         className="calendar-element"
         minDate={new Date()}
-        disabledDay={(date) => {
-          const day = date.getDay();
-          return day === 0 || day === 6; // Disable Sunday and Saturday
-        }}
+        // disabledDay={(date) => {
+        //   const day = date.getDay();
+        //   return day === 0 || day === 6; // Disable Sunday and Saturday
+        // }}
       />
     </div>
   );

@@ -90,16 +90,16 @@ function Pending_card({ data, refreshKey }) {
             </div>
             <div className="approval-div">
               <button
-                className="approve-btn btn"
-                onClick={() => approveRequest(decode.id, item.id)}
-              >
-                Approve
-              </button>
-              <button
                 className="reject-btn btn"
                 onClick={() => rejectRequest(decode.id, item.id)}
               >
                 Reject
+              </button>
+              <button
+                className="approve-btn btn"
+                onClick={() => approveRequest(decode.id, item.id)}
+              >
+                Approve
               </button>
             </div>
           </div>

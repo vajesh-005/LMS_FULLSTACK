@@ -1,13 +1,8 @@
-body {
-  background-color: #020203;
 
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
-    Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
-}
 .title {
   font-size: 20px;
-  color: #615fff;
-  font-weight: 600;
+  color: #0d1b2a;
+  font-weight: 700;
 margin: 20px;
 }
 .pending-section {
@@ -16,9 +11,11 @@ margin: 20px;
   max-width: 350px;
   max-height: 434px;
   overflow-y: scroll;
-  /* background-color: #020203; */
-  color: white;
-  border: 1.5px solid #26262d;
+  background-color: #e9ecef;
+  border: 1.5px solid #D1D3DB;
+  box-shadow:
+  0 1px 3px rgba(0, 0, 0, 0.06),
+  0 4px 6px rgba(0, 0, 0, 0.08);
   border-radius: 5px;
 }
 .pending-section::-webkit-scrollbar {
@@ -30,7 +27,7 @@ margin: 20px;
   margin: 10px;
 }
 .pending-section::-webkit-scrollbar-thumb {
-  background-color: #615fff;
+  background-color: #415a77;
   border-radius: 5px;
 }
 .pending-request-card {
@@ -52,7 +49,8 @@ margin: 20px;
 }
 .leave-name {
   font-size: 15px;
-  color: #615fff;
+  color: #415a77;
+  font-weight: 600;
   display: flex;
   gap: 5px;
   align-items: center;
@@ -60,12 +58,12 @@ margin: 20px;
 }
 .rs-modal-content {
   color: #ccc;
-  background-color: #1c1c20;
+  background-color: #e0e1dd;
   box-shadow: 0 4px 22px rgba(125, 122, 122, 0.3),
     0 2px 4px rgba(125, 122, 122, 0.2);
 }
 .rs-modal-title {
-  color: #615fff;
+  color: #415a77;
 }
 .rs-steps-item {
   margin: 0;
@@ -73,7 +71,7 @@ margin: 20px;
 .rs-steps-item-icon-wrapper {
   height: 20px;
   width: 20px;
-  border-color: #615fff !important;
+  border-color: #1b263b !important;
 }
 .rs-steps-item-tail {
   padding: 0;
@@ -82,8 +80,9 @@ margin: 20px;
   margin-left: -10px;
 }
 
+
 .rs-steps-item-status-finish,.rs-steps-item-title:after{
-    border-color: #615fff !important;
+    border-color: #1b263b !important;
 }
 .small-steps .rs-steps-item-title {
   font-size: 14px;
@@ -96,7 +95,7 @@ margin: 20px;
   font-size: 11px;
 }
 .rs-icon{
-    color: #615fff;
+    color: #1b263b;
 }
 
 .steps-role {
@@ -105,20 +104,23 @@ margin: 20px;
 .rs-steps-item-title{margin-top: -5px;
 }
 .rs-steps-item-status-finish>.rs-steps-item-content>.rs-steps-item-title>div>p{
-    color: white ;
+    color: #1b263b ;
 }
 .rs-steps-item-status-finish>.rs-steps-item-content>.rs-steps-item-description{
-    color: white ;
+    color: #1b263b ;
 }
 .rs-steps-item-status-process>.rs-steps-item-content>.rs-steps-item-title>div>p{
-    color: rgba(255, 255, 255, 0.29) ;
+    color:#415a77 ;
 }
 .rs-steps-item-status-process>.rs-steps-item-content>.rs-steps-item-description{
-    color: rgba(255, 255, 255, 0.29) ;
+    color:#415a77 ;
 }
 
 .rs-btn{
-    background-color: #615fff;
+    background-color: #415a77;
+}
+.rs-btn:hover{
+  background-color: #1b263b;
 }
 .main-modal{
     display: flex;
@@ -142,7 +144,7 @@ margin: 20px;
   
 .menu-icon {
   background: transparent;
-  color: white;
+  color: black;
   font-size: 1rem;
   margin: 0;
 }
@@ -156,29 +158,34 @@ margin: 20px;
     background-color: red;
 }
 .pending {
-  background-color: #27200f;
+  border: 1px solid rgba(255, 185, 0, 0.4);
   border-radius: 15px 15px;
   padding: 5px;
   font-size: small;
   color: #ffb900;
   font-weight: 500;
+  background-color: rgba(255, 185, 0, 0.06);
 }
 .approved {
-  background-color: #0d201b;
-  border-radius: 15px 15px;
-  padding: 5px;
-  font-size: small;
+  border: 1px solid rgba(0, 212, 146, 0.4); 
+  background-color: rgba(0, 212, 146, 0.06);
+  border-radius: 15px;
+  padding: 5px 10px;
+  font-size: 0.75rem;
   color: #00d492;
   font-weight: 500;
 }
+
 .rejected {
-  background-color: #261114;
-  border-radius: 15px 15px;
-  padding: 5px;
-  font-size: small;
+  border: 1px solid rgba(246, 97, 100, 0.4); 
+  background-color: rgba(246, 97, 100, 0.06); 
+  border-radius: 15px;
+  padding: 5px 10px;
+  font-size: 0.75rem;
   color: #f66164;
   font-weight: 500;
 }
+
 .cancelled {
   background-color: #202023;
   border-radius: 15px 15px;
@@ -189,11 +196,15 @@ margin: 20px;
 }
 .date {
   font-size: 12px;
-  color: #bcc1c9;
+  color: #020203;
   font-family: "Courier New", Courier, monospace;
 }
 .date-difference {
   font-size: 10px;
   margin-top: 7px;
   color: #63686f;
+}
+
+.modal-leave-details , .dates-range{
+  color: #1b263b;
 }

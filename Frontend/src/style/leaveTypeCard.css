@@ -5,7 +5,8 @@
 }
 .card-container {
   width: 200px;
-  background-color: #26262d;
+  background-color: #e9ecef;
+  border: 1.5px solid #D1D3DB;
   color: white;
   display: flex;
   flex-direction: column;
@@ -15,6 +16,9 @@
   padding: 10px 30px;
   font-size: 18px;
   border-radius: 5px;
+  box-shadow:
+  0 1px 3px rgba(0, 0, 0, 0.06),
+  0 4px 6px rgba(0, 0, 0, 0.08);
 }
 .type {
   width: 100%;
@@ -31,18 +35,19 @@
   align-items: center;
 }
 .items {
-  border-bottom: 2px dashed #4f4f51;
+  border-bottom: 2px dashed #1b263b;
   padding-bottom: 10px;
 }
 .type-name {
-  color: #615fff;
+  color: #415a77;
   font-weight: 650;
   font-size: 20px;
 }
 .type-code {
   font-size: 13px;
-  background-color: yellow;
-  color: black;
+  border: 1px solid rgba(255, 185, 0, 0.4);
+  background-color: rgba(255, 185, 0, 0.06);
+  color: #ffb900;
   padding: 1px 7px;
   border-radius: 5px;
   font-weight: 500;
@@ -50,22 +55,22 @@
 .leave-used-title,
 .leave-remaining-title {
   font-size: 15px;
-  color: #b3b3b3;
+  color: #1b263b;
 }
 .used-result,
 .remaining-result {
   font-weight: 800;
   font-size: 30px;
-  color: #615fff;
+  color: #415a77;
 }
 .description{
   font-size: 18px;
   width: 100%;
-  color: #615fff;
+  color: #415a77;
 }
 .text{
   font-size: 13px;
-  color: #b3b3b3;
+  color: #778da9;
   width: 100%;
   display: block; 
   word-wrap: break-word;
