@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Side_nav from "../Side_nav";
-import "../../style/Side_nav.css";
+import "../../style/side_nav.css";
 import LeaveTypeCard from "../LeaveTypeCard";
 import "../../style/leave_list.css";
 import LeaveRules from "../LeaveRules";
