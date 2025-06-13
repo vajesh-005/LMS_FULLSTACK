@@ -10,7 +10,7 @@ import {
   // faTools,
   faUserAlt,
 } from "@fortawesome/free-solid-svg-icons";
-import "../style/Side_nav.css";
+import "../style/side_nav.css";
 import { NavLink } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
 
