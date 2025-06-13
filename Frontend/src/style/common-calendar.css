@@ -32,7 +32,8 @@
     background-color: #1b263b;
 }
 .rbc-btn-group button:focus{
-    color: #415a77 !important;
+    color: white !important;
+    background-color: #1b263b;
 }
 .rbc-toolbar-label{
     color: #415a77;
@@ -46,6 +47,7 @@
     border-radius: 3px;
 }
 .rbc-month-view{
+    padding: 8px;
     border:none !important;
     border-radius: 5px;
     background-color: #e9ecef;
@@ -60,9 +62,7 @@ border-top: 1px solid #000 !important;
 .rbc-day-bg + .rbc-day-bg{
     border-left: 1px solid #000 !important;
 }
- .rbc-off-range-bg{
-background-color: #ffffff33;
-}
+
 .rbc-button-link{
     color: #1b263b;
 }
@@ -70,17 +70,27 @@ background-color: #ffffff33;
     color: #0b1831;
 }
 .rbc-current button{
-    color: #615fff; 
+    color: white !important; 
     text-decoration: underline; 
 }
 .rbc-today{
-    background-color: #a6bcdf;
+    background-color: #415a77;
     border-radius: 5px;
 }
 .rbc-off-range-bg{
-    background-color: #413c3c77;
+    background-color: #415a7754;
 }
 .rbc-event-content{
     color: black;
-
+    
+}
+.rbc-event{
+    padding: 10px;
+    width: 100px;
+    display: flex;
+    justify-content: center;
+}
+.rbc-row-segment{
+    display: flex;
+    justify-content: center;
 }

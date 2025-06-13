@@ -10,24 +10,24 @@ import Side_nav from "../Side_nav";
 const localizer = momentLocalizer(moment);
 const COLORS = {
   holiday: {
-    backgroundColor: "#f9d7d6", // deeper blush
-    color: "#d32f2f",            // darker red
+    backgroundColor: "#f9d7d6", 
+    color: "#d32f2f",            
   },
   floater: {
-    backgroundColor: "#f3d6f7", // richer lavender
-    color: "#7b1fa2",            // deeper purple
+    backgroundColor: "#f3d6f7", 
+    color: "#7b1fa2",            
   },
   "Week Off": {
-    backgroundColor: "#dce1e6", // muted gray-blue
-    color: "#495057",            // strong slate
+    backgroundColor: "#dce1e6", 
+    color: "#495057",            
   },
   self: {
-    backgroundColor: "#d2f0d9", // deeper mint
-    color: "#388e3c",            // stronger green
+    backgroundColor: "#d2f0d9", 
+    color: "#388e3c",            
   },
   peer: {
-    backgroundColor: "#c9e3fc", // bold sky blue tint
-    color: "#1565c0",            // deep blue
+    backgroundColor: "#c9e3fc", 
+    color: "#1565c0",            
   },
 };
 

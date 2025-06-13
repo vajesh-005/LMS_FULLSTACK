@@ -27,7 +27,6 @@ cron.schedule("0 2 1 * *", async () => {
           if (existing.length > 0) {
             const current = existing[0].total_leave;
       
-            // Only add if current total is below max
             if (current < policy.max_days_per_year) {
               const leaveToAdd = Math.min(
                 policy.accrual_per_month,
@@ -42,7 +41,6 @@ cron.schedule("0 2 1 * *", async () => {
               );
             }
           } else {
-            // Only insert if accrual is below or equal to max
             const initial = Math.min(
               policy.accrual_per_month,
               policy.max_days_per_year

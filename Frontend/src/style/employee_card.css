@@ -12,22 +12,25 @@
   height: 5px;
 }
 .employees-list-container::-webkit-scrollbar-track {
-  background-color: #020203;
-  margin: 10px;
+  /* background-color: #1b263b; */
+  /* margin: 10px; */
 }
 .employees-list-container ::-webkit-scrollbar-thumb {
-  background-color: #615fff;
+  background-color: #415a77;
   border-radius: 5px;
 }
 .employee-container {
   display: flex;
   flex-direction: column;
-  background-color: #262626;
+  background-color: #e9ecef;
+  border: 1.5px solid #d1d3db;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06), 0 4px 6px rgba(0, 0, 0, 0.08);
   color: #ccc;
-  width: 180px;
+  width: auto;
+  max-width: 190px;
   padding: 10px 20px;
   border-radius: 5px;
-  gap: 15px;
+  gap: 20px;
 }
 .employee-primary-details {
   display: flex;
@@ -37,35 +40,45 @@
 .employee-name {
   font-weight: 700;
   font-size: 18px;
-  color: #615fff;
-              
+  color: #415a77;
 }
-.employee-email{
+.employee-email {
   font-size: 0.8rem;
-  white-space: nowrap;        
-  overflow: hidden;           
-  text-overflow: ellipsis;    
-  max-width: 100%;            
-  display: block; 
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+  display: block;
   cursor: pointer;
+}
+.employee-number{
+  font-size: 0.8rem;
 }
 .employee-role {
   font-size: 13px;
+  color: #778da9;
+}
+.employee-id {
+  color: #1b263b;
 }
 .employee-contact-details {
   display: flex;
   flex-direction: column;
   align-items: center;
-  background-color: #3d3d3d;
+  background-color: #e0e1dd;
   padding: 10px;
-  color: white;
+  color: #1b263b;
   border-radius: 5px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06), 0 4px 6px rgba(0, 0, 0, 0.08);
+  border: 1.5px solid #d1d3db;
+
 }
 .employee-office-details {
-  /* border: 1px solid #ccc; */
   padding: 5px;
   border-radius: 5px;
   display: flex;
   flex-direction: column;
+  align-items: center;
   gap: 10px;
+  color: #415a77;
 }

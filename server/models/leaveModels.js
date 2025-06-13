@@ -75,7 +75,7 @@ exports.putLeaveRequestForUser = async (
 
   if (leaveTypeName.trim() === "Sick Leave") {
     if (dateDifference === 1 && remaining_leaves > 0) {
-      approvalsNeeded = 0; // Auto-approved
+      approvalsNeeded = 0; 
     } else if (remaining_leaves >= dateDifference) {
       approvalsNeeded = 0;
     } else {
@@ -188,17 +188,20 @@ exports.updateLeaveCount = async (leaveRequestId) => {
 };
 
 exports.cancelLeaveRequest = async (leaveRequestId) => {
-  const query = `UPDATE leave_request 
+  const query = `
+    UPDATE leave_request
     SET status = 350
-    WHERE id = ?`;
+    WHERE id = ?
+  `;
   try {
     const [result] = await db.query(query, [leaveRequestId]);
     return result;
   } catch (error) {
-    console.log("error occured in model !", error.message);
-    return { message: "failed to cancel" };
+    console.log("Error occurred in model!", error.message);
+    return { message: "Failed to cancel" };
   }
 };
+
 
 
 
@@ -207,43 +210,57 @@ exports.getLeaves = async (userId) => {
     SELECT SUM(COALESCE(leaves_used, 0)) AS total_leaves_used
     FROM remaining_leaves
     WHERE employee_id = ?;
-`;
+  `;
+
   try {
     const [results] = await db.query(query, [userId]);
     return results;
   } catch (error) {
-    console.log("error occurred in model !", error.message);
-    return { message: "failed to get leaves" };
+    console.log("Error occurred in model:", error.message);
+    return [];
   }
 };
+
 
 exports.getLeavesLists = async (userId) => {
-  const query = `SELECT name , leaves_taken , total_leave - leaves_taken AS remaining_leaves , description
-     FROM leave_balance 
-     JOIN leave_type
-     ON leave_type.id = leave_balance.leave_type_id WHERE leave_balance.employee_id = ?`;
+  const query = `
+    SELECT 
+      name,
+      leaves_taken,
+      total_leave - leaves_taken AS remaining_leaves,
+      description
+    FROM leave_balance 
+    JOIN leave_type ON leave_type.id = leave_balance.leave_type_id 
+    WHERE leave_balance.employee_id = ?`;
+
   try {
     const [result] = await db.query(query, [userId]);
     return result;
   } catch (error) {
-    console.log("error occurred in model ", error.message);
-    return { message: "failed to get lists" };
+    console.error("Error occurred in model:", error.message);
+    throw error;
   }
 };
 
+
 exports.getNames = async (userId) => {
-  const query = `select lt.id, lt.name as name from leave_type lt 
-JOIN leave_policy lp ON lt.id = lp.leave_type_id
-JOIN employee u ON u.emp_type_id = lp.employee_type_id
-WHERE u.id = ?;`;
+  const query = `
+    SELECT lt.id, lt.name AS name 
+    FROM leave_type lt 
+    JOIN leave_policy lp ON lt.id = lp.leave_type_id
+    JOIN employee u ON u.emp_type_id = lp.employee_type_id
+    WHERE u.id = ?
+  `;
+
   try {
     const [result] = await db.query(query, [userId]);
     return result;
   } catch (error) {
-    console.log("error occurred in model ", error.message);
-    return { message: "failed to get names " };
+    console.log("Error occurred in model", error.message);
+    return { message: "Failed to get names" };
   }
 };
+
 
 exports.update = async (userId, requestId) => {
   const updateQuery = `
@@ -276,18 +293,14 @@ exports.update = async (userId, requestId) => {
     WHERE id = ?`;
 
   try {
-    // 1. Mark current approver's approval
     await db.query(updateQuery, [requestId, userId]);
 
-    // 2. Reveal next approver
     await db.query(revealNextQuery, [requestId, requestId]);
 
-    // 3. Check approval status
     const [checkResult] = await db.query(checkAllApprovedQuery, [requestId]);
     const { total_approvals, pending_approvals } = checkResult[0];
     console.log(total_approvals, pending_approvals, "testing ! ");
 
-    // 4. If all approved or no approval_flow records exist
     if (pending_approvals == 0) {
       await db.query(updateLeaveRequestStatusQuery, [requestId]);
       await exports.updateLeaveCount(requestId);
@@ -305,31 +318,37 @@ exports.update = async (userId, requestId) => {
   }
 };
 
-exports.reject = async (userId, requestId) => {
-  const query = `UPDATE leave_request
-  SET status = 300 WHERE id = ?`;
-  const updateQuery = `UPDATE approval_flow 
-  SET approval_status=300 WHERE approver_id = ? AND leave_id= ?` 
+exports.reject = async (userId, requestId, comment) => {
+  const updateLeaveQuery = `
+    UPDATE leave_request
+    SET status = 300
+    WHERE id = ?`;
+
+  const updateApprovalQuery = `
+    UPDATE approval_flow 
+    SET approval_status = 300, comments = ?
+    WHERE approver_id = ? AND leave_id = ?`;
+
   try {
-    await db.query(query , [requestId]);
-    await db.query(updateQuery , [userId, requestId]);
-    return ({message : 'Updated '})
+    const [leaveResult] = await db.query(updateLeaveQuery, [requestId]);
+    const [approvalResult] = await db.query(updateApprovalQuery, [comment, userId, requestId]);
+
+    return {
+      message: "Updated",
+      affected: leaveResult.affectedRows + approvalResult.affectedRows,
+    };
   } catch (error) {
-    console.log("Error occurred in model !", error.message);
-    return { message: "Internal server error" };
+    console.error("Error occurred in model!", error.message);
+    throw error;
   }
 };
 
 
-exports.getHolidays = async (start, end) => {
-  const sql = `
-    SELECT title AS name, date AS start_date, date AS end_date, type
-    FROM holidays
-    WHERE date BETWEEN ? AND ?
-  `;
-  const [rows] = await db.query(sql, [start.format('YYYY-MM-DD'), end.format('YYYY-MM-DD')]);
-  return rows;
-};
+
+
+
+
+
 
 exports.getApprovedLeaves = async (start, end, whereClause, params = []) => {
   const sql = `
@@ -346,7 +365,24 @@ exports.getApprovedLeaves = async (start, end, whereClause, params = []) => {
       AND lr.end_date >= ?
       AND ${whereClause}
   `;
-  const [rows] = await db.query(sql, [end.format('YYYY-MM-DD'), start.format('YYYY-MM-DD'), ...params]);
+  const [rows] = await db.query(sql, [
+    end.format("YYYY-MM-DD"),
+    start.format("YYYY-MM-DD"),
+    ...params,
+  ]);
+  return rows;
+};
+
+exports.getHolidays = async (start, end) => {
+  const sql = `
+    SELECT title AS name, date AS start_date, date AS end_date, type
+    FROM holidays
+    WHERE date BETWEEN ? AND ?
+  `;
+  const [rows] = await db.query(sql, [
+    start.format("YYYY-MM-DD"),
+    end.format("YYYY-MM-DD"),
+  ]);
   return rows;
 };
 
@@ -357,15 +393,16 @@ exports.generateWeekOffs = (start, end) => {
     const d = cursor.day();
     if (d === 0 || d === 6) {
       offs.push({
-        name: 'Week Off',
-        start_date: cursor.format('YYYY-MM-DD'),
-        end_date: cursor.format('YYYY-MM-DD'),
-        type: 'Week Off',
+        name: "Week Off",
+        start_date: cursor.format("YYYY-MM-DD"),
+        end_date: cursor.format("YYYY-MM-DD"),
+        type: "Week Off",
       });
     }
-    cursor.add(1, 'day');
+    cursor.add(1, "day");
   }
   return offs;
 };
+
 
 

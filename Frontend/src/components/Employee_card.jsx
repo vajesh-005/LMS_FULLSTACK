@@ -31,7 +31,7 @@ function Employee_card(props) {
                 trigger="hover"
                 speaker={<Tooltip>{key.email}</Tooltip>}
               >
-                <div className="employee-email">{key.email}</div>
+                <div className="employee-email">Email : {key.email}</div>
               </Whisper>
               <div className="employee-number">
                 Phone : {key.contact_number}

@@ -2,12 +2,12 @@
   display: flex;
   justify-content: space-evenly;
   gap: 10px;
+  padding: 10px;
 }
 .card-container {
   width: 200px;
   background-color: #e9ecef;
   border: 1.5px solid #D1D3DB;
-  color: white;
   display: flex;
   flex-direction: column;
   justify-content: space-evenly;

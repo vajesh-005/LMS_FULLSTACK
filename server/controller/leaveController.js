@@ -23,24 +23,19 @@ exports.canceleavebyId = async (request, h) => {
   try {
     const leaveRequestId = request.params.leaverequestid;
     const user = await leaveModel.cancelLeaveRequest(leaveRequestId);
-    if (!user) return h.response("User not found !").code(404);
-    else return h.response(user[0]).code(200);
+
+    if (!user || user.affectedRows === 0) {
+      return h.response("Leave request not found!").code(404);
+    }
+
+    return h.response({ message: "Leave request cancelled successfully." }).code(200);
   } catch (error) {
-    console.log("error occured", error.message);
+    console.log("error occurred", error.message);
     return h.response("Internal server error").code(500);
   }
 };
-exports.updateLeaveCount = async (request, h) => {
-  try {
-    const leaveRequestId = request.params.leaverequestid;
-    const user = await leaveModel.updateLeaveCount(leaveRequestId);
-    if (!user) return h.response("User not found !").code(404);
-    else return h.response(user[0]).code(200);
-  } catch (error) {
-    console.log("error occured !", error.message);
-    return h.response("Internal server error !").code(500);
-  }
-};
+
+
 exports.updateManagerStatus = async (request, h) => {
   try {
     const leaveRequestId = request.params.leaverequestid;
@@ -53,101 +48,73 @@ exports.updateManagerStatus = async (request, h) => {
   }
 };
 
-exports.updateDirectorStatus = async (request, h) => {
-  try {
-    const leaveRequestId = request.params.leaverequestid;
-    const user = await leaveModel.updateDirectorStatus(leaveRequestId);
-    if (!user) return h.response("User not found !").code(404);
-    else return h.response(user[0]).code(200);
-  } catch (error) {
-    console.log("error occured ", error.message);
-    return h.response("Internal server error").code(500);
-  }
-};
 
-exports.updateHrStatus = async (request, h) => {
-  try {
-    const leaveRequestId = request.params.leaverequestid;
-    const user = await leaveModel.updateHrStatus(leaveRequestId);
-    if (!user) return h.response("User not found !").code(404);
-    else return h.response(user[0]).code(200);
-  } catch (error) {
-    console.log("error occurred", error.message);
-    return h.response("Internal server error").code(500);
-  }
-};
 
-exports.updateStatus = async (request, h) => {
-  try {
-    const leaveRequestId = request.params.leaverequestid;
-    const user = await leaveModel.updateStatus(leaveRequestId);
-    if (!user) return h.response("User not found !").code(404);
-    else return h.response(user[0]).code(200);
-  } catch (error) {
-    console.log("error occurred ", error.message);
-    return h.response("Internal server error").code(500);
-  }
-};
 
 exports.getleavesUsed = async (request, h) => {
   try {
     const userId = request.params.userid;
-    const user = await leaveModel.getLeaves(userId);
-    if (!user) return h.response("User not found !").code(404);
-    else return h.response(user[0]).code(200);
+    const result = await leaveModel.getLeaves(userId);
+
+    if (!result || result.length === 0) {
+      return h.response("User not found!").code(404);
+    }
+
+    return h.response(result[0]).code(200);
   } catch (error) {
-    console.log("error occurred !", error.message);
+    console.log("Error occurred in controller:", error.message);
     return h.response("Internal server error").code(500);
   }
 };
+
 
 exports.getLeavesList = async (request, h) => {
   const userId = request.params.userid;
+
   try {
-    const user = await leaveModel.getLeavesLists(userId);
-    return h.response(user);
+    const result = await leaveModel.getLeavesLists(userId);
+    return h.response(result).code(200);
   } catch (error) {
-    console.log("error occured in controller", error.message);
+    console.error("Error occurred in controller:", error.message);
     return h.response("Internal server error").code(500);
   }
 };
+
 
 exports.getName = async (request, h) => {
   const userId = request.params.userid;
+
   try {
-    const user = await leaveModel.getNames(userId);
-    return h.response(user).code(200);
+    const result = await leaveModel.getNames(userId);
+    return h.response(result).code(200);
   } catch (error) {
-    console.log("error occurred in controller !", error.message);
+    console.log("Error occurred in controller!", error.message);
     return h.response("Internal server error").code(500);
   }
 };
 
-exports.updateStatusByrole = async (request, h) => {
-  const userId = request.params.id;
-  const requestId = request.params.request_id;
-  try {
-    const user = await leaveModel.update(userId, requestId);
-    if (!user) return h.response("Invalid role or update failed").code(400);
-    return h.response(user).code(200);
-  } catch (error) {
-    console.log("Error occurred in controller !", error.message);
-    return h.response("Internal server error ").code(500);
-  }
-};
+
 exports.rejectLeaveByRole = async (request, h) => {
   const userId = request.params.id;
   const requestId = request.params.request_id;
+  const { comment } = request.payload;
 
   try {
-    const user = await leaveModel.reject(userId, requestId);
-    if (!user) return h.response("Invalid role !").code(400);
-    return h.response(user).code(200);
+    const result = await leaveModel.reject(userId, requestId, comment);
+    
+    if (!result || result.affected === 0) {
+      return h.response("Invalid role or request not found!").code(400);
+    }
+
+    return h.response({ message: "Leave request rejected successfully." }).code(200);
   } catch (error) {
-    console.log("Error occurred in controller !", error.message);
-    return h.response("Internal server error !").code(500);
+    console.error("Error occurred in controller!", error.message);
+    return h.response("Internal server error!").code(500);
   }
 };
+
+
+
 
 exports.getHolidays = async (request, h) => {
   const { user_id } = request.params;
@@ -176,12 +143,14 @@ exports.getHolidays = async (request, h) => {
       "lr.employee_id = ?",
       [user_id]
     );
+
     const reportsLeavesRows = await leaveModel.getApprovedLeaves(
       start,
       end,
       "e.manager_id = ?",
       [user_id]
     );
+
     const peersLeavesRows = managerId
       ? await leaveModel.getApprovedLeaves(
           start,
@@ -218,5 +187,3 @@ exports.getHolidays = async (request, h) => {
     return h.response({ error: "Internal Server Error" }).code(500);
   }
 };
-
-

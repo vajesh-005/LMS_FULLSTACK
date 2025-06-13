@@ -39,21 +39,24 @@
     text-decoration: none;
 }
 .item:hover{
-  color: black;
+  color: white;
     cursor: pointer;
     text-decoration: none;
-
-
 }
 .item:focus{
   text-decoration: none;
 
 }
 .active{
+  position: relative;
   color: #1c1c20;
   background-color: #e0e1dd;
   border-radius: 50px 0px 0px 50px;
 }
+.active:hover{
+  color: black;
+}
+
 /* .Dashboard-icon{
     color: red;
 }

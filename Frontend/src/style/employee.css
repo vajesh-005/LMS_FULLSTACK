@@ -25,9 +25,16 @@
 }
 .add-employee button {
   padding: 10px 20px;
-  background-color: #615fff;
+  background-color: #1b263b;
   color: white;
   border-radius: 5px;
+  border: 1px solid #1a1f33;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  box-shadow:
+  0 1px 3px rgba(0, 0, 0, 0.06),
+  0 4px 6px rgba(0, 0, 0, 0.08);
 }
 .search-container {
   display: flex;
@@ -40,21 +47,52 @@
   border-radius: 5px;
 }
 .rs-input-group-addon {
-  background-color: #262626;
+  background-color: #e9ecef;
   cursor: pointer;
 }
 
 .rs-input {
-  background-color: #2626264e;
-  color: whitesmoke;
+  color: #415a77;
+  border: 1px solid #1b263b;
+}
+.rs-form-control-wrapper:hover{
+  border-color: #1b263b;
 }
 .rs-input-group {
   border-color: #262626;
 }
-.rs-input-group:hover , .rs-input-group:focus {
-  border-color: #615fff;
+.rs-input-group:hover  {
+  border-color: #415a77 !important;
 }
+
 
 .rs-input{
   background-color: #e9ecef;
+}
+.form-row{
+  display: flex;
+  gap: 10px;
+}
+.rs-picker-popup{
+  max-width: 150px;
+  height: 150px;
+}
+.rs-picker-select-menu-item.rs-picker-select-menu-item-focus{
+  color: #1b263b;
+  background-color: #dee0ff;
+}
+.rs-picker-select-menu-item:hover{
+  background-color: #dee0ff;
+  color: #1b263b;
+}
+.rs-picker-toggle-value{
+  color: #1b263b !important;
+}
+.select-picker-group{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.rs-form-group:not(:last-child){
+  margin: 0 !important;
 }

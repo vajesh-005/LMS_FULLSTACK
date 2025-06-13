@@ -105,7 +105,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   width: 90%;
   background: #e0e1dd;
   padding: 10px 20px;
-  border: 1.5px solid #898d93;
+  border: 1px solid #898d93;
   border-radius: 5px;
   color: black;
 }
@@ -136,6 +136,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   height: 80px;
   width: 90%;
   outline: none;
+  padding:4px;
 }
 .reason-textarea:hover{
   border: 1px solid #1b263b;
@@ -150,17 +151,20 @@ justify-content: flex-end;
 margin-right: 15px;
 }
 .submit-btn {
-  background-color: #a6bcdf !important;  
+  background-color: #1b263b !important;  
   border-radius: 5px;
-  border: 1.5px solid #1b263b;
-  color: #1b263b;
+  border: 1.5px solid #1b263b ;
+  color: white;
   font-weight: 500;
   padding: 6px 12px;
   transition: background-color 0.2s ease;
 }
+
 
 .submit-button-text {
   margin: 0;
   padding: 10px;
   color: white;
 }
+
+

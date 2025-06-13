@@ -9,7 +9,7 @@ margin: 20px;
   width: auto;
   min-width: 350px;
   max-width: 350px;
-  max-height: 434px;
+  height: 434px;
   overflow-y: scroll;
   background-color: #e9ecef;
   border: 1.5px solid #D1D3DB;
@@ -19,17 +19,9 @@ margin: 20px;
   border-radius: 5px;
 }
 .pending-section::-webkit-scrollbar {
-  width: 5px;
-  height: 5px;
+display: none;
 }
-.pending-section::-webkit-scrollbar-track {
-  background-color: #020203;
-  margin: 10px;
-}
-.pending-section::-webkit-scrollbar-thumb {
-  background-color: #415a77;
-  border-radius: 5px;
-}
+
 .pending-request-card {
   border-bottom: 1px solid #26262d;
   padding: 10px;
@@ -151,6 +143,9 @@ margin: 20px;
 .rs-btn-subtle{
     background-color: #ccc;
 }
+.rs-btn-subtle:hover{
+  background-color: #ccc;
+}
 .cancel-btn{
     background-color: rgba(255, 0, 0, 0.636);
 }
@@ -207,4 +202,33 @@ margin: 20px;
 
 .modal-leave-details , .dates-range{
   color: #1b263b;
+}
+
+.rs-modal{
+  width: auto;
+  max-width: 350px;
+
+}
+.rs-form-group{
+  width: 250px;
+}
+.rs-form-control-label{
+  color: #1b263b;
+}
+.rs-modal-wrapper{
+  display: flex;
+  align-items: center;
+}
+.no-requests-message {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 20px;
+  text-align: center;
+  color: #1b263b;
+  margin-top: 20px;
+}
+.no-leaves-img{
+  height: 200px;
+  width: auto;
 }

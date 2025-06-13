@@ -4,33 +4,14 @@ const bcrypt = require("bcrypt");
 const Joi = require("joi");
 
 exports.loginUser = async (request, h) => {
-  const schema = Joi.object({
-    email: Joi.string().email().required().messages({
-      "string.empty": "Email is required",
-      "string.email": "Invalid email format",
-      "any.required": "Email is required",
-    }),
-    password: Joi.string().min(1).required().messages({
-      "string.empty": "Password is required",
-      "any.required": "Password is required",
-    }),
-  });
-
-  const { error, value } = schema.validate(request.payload);
-  if (error) {
-    return h.response({ message: error.details[0].message }).code(400);
-  }
-
-  const { email, password } = value;
+  const { email, password } = request.payload;
 
   try {
-    const userResult = await userModel.getUserWithEmail(email);
-    const user = userResult;
-    console.log(user);
+    const user = await userModel.getUserWithEmail(email);
     if (!user) return h.response({ message: "User not found" }).code(404);
 
-    const compare = await bcrypt.compare(password.trim(), user.password);
-    if (!compare)
+    const isValid = await bcrypt.compare(password.trim(), user.password);
+    if (!isValid)
       return h.response({ message: "Password is incorrect!" }).code(401);
 
     const token = jwt.sign(
@@ -45,6 +26,7 @@ exports.loginUser = async (request, h) => {
     return h.response({ message: "Internal server error" }).code(500);
   }
 };
+
 
 exports.addUser = async (request, h) => {
   const {

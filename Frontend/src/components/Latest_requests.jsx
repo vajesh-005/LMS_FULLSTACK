@@ -2,12 +2,14 @@ import React, { useRef, useEffect, useState } from "react";
 import "../style/latest_requests.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEllipsisH } from "@fortawesome/free-solid-svg-icons";
+import No_leaves from '../assets/No_leaves.png';
 
 import { Token } from "./Token";
 import BASE_URL from "./url";
 import { Whisper, Popover, Button, Modal, Steps, Tooltip } from "rsuite";
 
 function Latest_requests(props) {
+  console.log(props , "request data")
   const whisperRef = useRef(null);
 
   const status_code = {
@@ -96,82 +98,89 @@ function Latest_requests(props) {
   return (
     <div className="pending-section">
       <p className="title">Latest Leaves</p>
-      {pendingRequest?.map((item, index) => (
-        <div key={index} className="pending-request-card">
-          <div className="leave-type-and-status">
-            <div className="leave-name">
-              {item.name}
-              <Whisper
-                ref={whisperRef}
-                placement="bottomEnd"
-                trigger="click"
-                speaker={
-                  <Popover arrow={false} full>
-                    <div style={{ padding: 10 }}>
-                      <p
-                        style={{ cursor: "pointer" }}
-                        onClick={() => {
-                          handleViewDetails(item);
-                          whisperRef.current?.close();
-                        }}
-                      >
-                        View Details
-                      </p>
-                      {item.status !== 350 &&
-                        new Date(item.start_date) >=
-                          new Date().setHours(0, 0, 0, 0) && (
-                          <p
-                            style={{ cursor: "pointer" }}
-                            onClick={() => {
-                              handleOpenCancelPopup(item.id);
-                              whisperRef.current?.close?.();
-                            }}
-                          >
-                            Cancel Leave
-                          </p>
-                        )}
-                    </div>
-                  </Popover>
-                }
+      {pendingRequest && pendingRequest.length > 0 ? (
+        pendingRequest.map((item, index) => (
+          <div key={index} className="pending-request-card">
+            <div className="leave-type-and-status">
+              <div className="leave-name">
+                {item.leave_type}
+                <Whisper
+                  ref={whisperRef}
+                  placement="bottomEnd"
+                  trigger="click"
+                  speaker={
+                    <Popover arrow={false} full>
+                      <div style={{ padding: 10 }}>
+                        <p
+                          style={{ cursor: "pointer" }}
+                          onClick={() => {
+                            handleViewDetails(item);
+                            whisperRef.current?.close();
+                          }}
+                        >
+                          View Details
+                        </p>
+                        {item.status !== 350 &&
+                          item.status !== 300 &&
+                          new Date(item.start_date) >=
+                            new Date().setHours(0, 0, 0, 0) && (
+                            <p
+                              style={{ cursor: "pointer" }}
+                              onClick={() => {
+                                handleOpenCancelPopup(item.id);
+                                whisperRef.current?.close?.();
+                              }}
+                            >
+                              Cancel Leave
+                            </p>
+                          )}
+                      </div>
+                    </Popover>
+                  }
+                >
+                  <button className="menu-icon">
+                    <FontAwesomeIcon icon={faEllipsisH} />
+                  </button>
+                </Whisper>
+              </div>
+
+              <div
+                className={`status ${
+                  item.status === 200
+                    ? "approved"
+                    : item.status === 300
+                    ? "rejected"
+                    : item.status === 350
+                    ? "cancelled"
+                    : "pending"
+                }`}
               >
-                <button className="menu-icon">
-                  <FontAwesomeIcon icon={faEllipsisH} />
-                </button>
-              </Whisper>
+                {status_code[item.status]}
+              </div>
             </div>
 
-            <div
-              className={`status ${
-                item.status === 200
-                  ? "approved"
-                  : item.status === 300
-                  ? "rejected"
-                  : item.status === 350
-                  ? "cancelled"
-                  : "pending"
-              }`}
-            >
-              {status_code[item.status]}
+            <div className="date-and-days">
+              <div className="date">
+                {item.start_date &&
+                  new Date(item.start_date).toLocaleDateString()}
+              </div>
+              <div className="date-difference">
+                {getDifference(item.start_date, item.end_date) +
+                  (getDifference(item.start_date, item.end_date) > 1
+                    ? " Days"
+                    : " Day")}
+              </div>
+              <div className="date">
+                {item.end_date && new Date(item.end_date).toLocaleDateString()}
+              </div>
             </div>
           </div>
-
-          <div className="date-and-days">
-            <div className="date">
-              {item.start_date &&
-                new Date(item.start_date).toLocaleDateString()}
-            </div>
-            <div className="date-difference">
-              {getDifference(item.start_date, item.end_date) +
-                (getDifference(item.start_date, item.end_date) > 1
-                  ? " Days"
-                  : " Day")}
-            </div>
-            <div className="date">
-              {item.end_date && new Date(item.end_date).toLocaleDateString()}
-            </div>
-          </div>
-        </div>
-      ))}
+        ))
+      ) : (
+        <div className="no-requests-message">
+          <img src={No_leaves} className="no-leaves-img"/>
+          No leave requests applied.</div>
+      )}
 
       <Modal
         open={cancelPopupOpen}
@@ -268,6 +277,29 @@ function Latest_requests(props) {
                     <p>
                       <strong>Status:</strong>{" "}
                       {status_code[selectedLeaveData.status]}
+                      {selectedLeaveData.status === 300 &&
+                        selectedLeaveData.approvals.some(
+                          //some return the boolean value if the condition passed
+                          (app) => app.status === 300 && app.comment
+                        ) && (
+                          <Whisper
+                            placement="top"
+                            trigger="hover"
+                            speaker={
+                              <Tooltip arrow={false}>
+                                {
+                                  selectedLeaveData.approvals.find(
+                                    (app) => app.status === 300 && app.comment
+                                  )?.comment
+                                }
+                              </Tooltip>
+                            }
+                          >
+                            <span style={{ marginLeft: 6, cursor: "pointer" }}>
+                              🛈
+                            </span>
+                          </Whisper>
+                        )}
                     </p>
                   </div>
                 </div>
@@ -275,22 +307,38 @@ function Latest_requests(props) {
 
               <div style={{ marginTop: 20 }}>
                 <Steps
-                 currentStatus="error"
+                  currentStatus="error"
                   className="small-steps"
                   current={selectedLeaveData.approvals
-                    .filter(app => app && app.name && app.role && app.status !== null)
+                    .filter(
+                      (app) =>
+                        app && app.name && app.role && app.status !== null
+                    )
                     .sort((a, b) => a.approval_order - b.approval_order)
                     .findIndex((app) => app.status !== 200)}
                   horizontal
                 >
                   {selectedLeaveData.approvals
-                  .filter(app => app && app.name && app.role && app.status !== null)
+                    .filter(
+                      (app) =>
+                        app && app.name && app.role && app.status !== null
+                    )
                     .sort((a, b) => a.approval_order - b.approval_order)
-                    .map((approval, index) => {
+                    .map((approval, index, arr) => {
+                      const isAfterRejection = arr
+                        .slice(0, index)
+                        .some((a) => a.status === 300);
+
                       let stepStatus = "wait";
-                      if (approval.status === 200) stepStatus = "finish";
-                      else if (approval.status === 100) stepStatus = "process";
-                      else if (approval.status===300) stepStatus = "error"
+
+                      if (isAfterRejection) {
+                        stepStatus = "not-sent";
+                      } else {
+                        if (approval.status === 200) stepStatus = "finish";
+                        else if (approval.status === 100)
+                          stepStatus = "process";
+                        else if (approval.status === 300) stepStatus = "error";
+                      }
 
                       return (
                         <Steps.Item
@@ -303,7 +351,9 @@ function Latest_requests(props) {
                             </div>
                           }
                           description={
-                            approval.approved_at
+                            stepStatus === "not-sent"
+                              ? "Not sent for approval"
+                              : approval.approved_at
                               ? `Approved at: ${new Date(
                                   approval.approved_at
                                 ).toLocaleDateString()}`

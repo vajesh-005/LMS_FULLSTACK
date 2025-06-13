@@ -43,27 +43,41 @@ function Employees() {
   }, [decode.id, decode.role, token]);
 
   useEffect(() => {
-    const filtered = employees.filter((emp) =>
-      `${emp.employee_name} ${emp.email} ${emp.role} ${emp.contact_number} ${emp.manager}`
-        .toLowerCase()
-        .includes(searchValue.toLowerCase())
-    );
-    setFilteredEmployees(filtered);
-  }, [searchValue, employees]);
+    if (!decode?.id) return;
+  
+    fetch(`http://localhost:1110/mappedusers/${decode.id}/${decode.role}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+    })
+      .then((results) => results.json())
+      .then((data) => {
+        if (Array.isArray(data)) {
+          setEmployees(data);
+          setFilteredEmployees(data);
+        } else {
+          setEmployees([]);
+          setFilteredEmployees([]);
+          console.warn("Unexpected data format:", data);
+        }
+      })
+      .catch((error) => console.log(error));
+  }, [decode.id, decode.role, token]);
 
   const openModal = async () => {
     setShowModal(true);
 
     try {
       const [managerRes, roleRes] = await Promise.all([
-        fetch(`${BASE_URL}/list/managers` , {
+        fetch(`${BASE_URL}/list/managers`, {
           headers: {
             Authorization: `Bearer ${token}`,
             "Content-Type": "application/json",
           },
-        }), 
-        
-        fetch(`${BASE_URL}/list/employee-types` ,{
+        }),
+
+        fetch(`${BASE_URL}/list/employee-types`, {
           headers: {
             Authorization: `Bearer ${token}`,
             "Content-Type": "application/json",
@@ -122,7 +136,7 @@ function Employees() {
           <div className="total-employees">
             Employee Directory
             <div className="total-employees-count">
-              Total candidates count : {employees.length}
+              Total Employees count : {employees.length}
             </div>
           </div>
           {decode.role === "HR" && (
@@ -137,30 +151,36 @@ function Employees() {
             </Modal.Header>
             <Modal.Body>
               <Form fluid onChange={setFormData} formValue={formData}>
-                <Form.Group>
-                  <Form.ControlLabel>Name</Form.ControlLabel>
-                  <Form.Control name="name" />
-                </Form.Group>
+                <div className="form-row">
+                  <Form.Group>
+                    <Form.ControlLabel>Name</Form.ControlLabel>
+                    <Form.Control name="name"  placeholder="Enter name..."/>
+                  </Form.Group>
 
-                <Form.Group>
-                  <Form.ControlLabel>Email</Form.ControlLabel>
-                  <Form.Control name="email" type="email" />
-                </Form.Group>
-                <Form.Group>
-                  <Form.ControlLabel>Contact No </Form.ControlLabel>
-                  <Form.Control name="contact_number" type="text" />
-                </Form.Group>
+                  <Form.Group>
+                    <Form.ControlLabel>Contact No</Form.ControlLabel>
+                    <Form.Control name="contact_number" type="text" placeholder="+91 _ _ _ _"/>
+                  </Form.Group>
+                </div>
 
-                <Form.Group>
-                  <Form.ControlLabel>Password</Form.ControlLabel>
-                  <Form.Control name="password" type="password" />
-                </Form.Group>
+                <div className="form-row">
+                  <Form.Group>
+                    <Form.ControlLabel>Email</Form.ControlLabel>
+                    <Form.Control name="email" type="email" placeholder="email@gmail.com" />
+                  </Form.Group>
 
+                  <Form.Group>
+                    <Form.ControlLabel>Password</Form.ControlLabel>
+                    <Form.Control name="password" type="password" placeholder="Password.."/>
+                  </Form.Group>
+                </div>
+
+                <div className="select-picker-group">
                 <Form.Group>
                   <Form.ControlLabel>Manager</Form.ControlLabel>
                   <SelectPicker
                     data={managers.map((m) => ({
-                      value: m.value, 
+                      value: m.value,
                       label: `${m.label} (${m.role})`,
                     }))}
                     name="manager_id"
@@ -180,22 +200,21 @@ function Employees() {
                     value={formData.emp_type_id}
                     style={{ width: "100%" }}
                     placeholder="Select employee type"
-                    onChange={(value) => {
-                      console.log("Selected emp_type_id:", value);
-                      setFormData((prev) => ({ ...prev, emp_type_id: value }));
-                    }}
+                    onChange={(value) =>
+                      setFormData((prev) => ({ ...prev, emp_type_id: value }))
+                    }
                   />
                 </Form.Group>
+                </div>
               </Form>
             </Modal.Body>
             <Modal.Footer>
-            <Button onClick={() => setShowModal(false)} appearance="subtle">
+              <Button onClick={() => setShowModal(false)} appearance="subtle">
                 Cancel
               </Button>
               <Button onClick={handleSubmit} appearance="primary">
                 Submit
               </Button>
-              
             </Modal.Footer>
           </Modal>
         </div>
@@ -214,8 +233,15 @@ function Employees() {
         {filteredEmployees.length > 0 ? (
           <Employee_card data={filteredEmployees} />
         ) : (
-          <div style={{ padding: "20px", fontSize: "16px", color: "#888" , textAlign:"center"}}>
-             No results found !
+          <div
+            style={{
+              padding: "20px",
+              fontSize: "16px",
+              color: "#888",
+              textAlign: "center",
+            }}
+          >
+            No results found !
           </div>
         )}
       </div>

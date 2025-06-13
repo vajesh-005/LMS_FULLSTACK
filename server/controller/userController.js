@@ -1,93 +1,93 @@
 const userModel = require("../models/userModels");
 
 exports.getAllusers = async function (request, h) {
+  const { userid, role } = request.params;
+
   try {
-    const userId = request.params.userid;
-    const role = request.params.role;
-    const users = await userModel.fetchAllUsers(userId , role);
-    if (!users) return h.response("Not found !").code(404);
-    else return h.response(users).code(200);
+    const users = await userModel.fetchAllUsers(userid, role);
+
+    if (!users || users.length === 0) {
+      return h.response([]).code(200); // Return an empty array, not an object
+    }
+
+    return h.response(users).code(200);
   } catch (error) {
-    console.error("Error occurred:", error.message);
-    return h.response("Internal Server Error").code(500);
+    console.error("Error in getAllusers:", error.message);
+    return h.response({ message: "Internal Server Error" }).code(500);
   }
 };
+
 
 exports.getLeavesForUser = async function (request, h) {
+  const id = request.params.id;
+
+  if (!id || isNaN(id)) {
+    return h.response({ error: "Invalid user ID" }).code(400);
+  }
+
   try {
-    const id = request.params.id;
-    const user = await userModel.fetchTotalLeavesForUser(id);
-    if (!user || user.length<1) return h.response({error : 'user not found !'}).code(404);
-    else return h.response(user[0]).code(200);
+    const result = await userModel.fetchTotalLeavesForUser(id);
+
+    if (!result || result.length === 0) {
+      return h.response({ error: "User not found or no leave data" }).code(404);
+    }
+
+    return h.response(result[0]).code(200);
   } catch (error) {
-    console.log("error occurred", error.message);
-    return h.response("Internal Server Error").code(500);
+    console.error("Error occurred in getLeavesForUser:", error.message);
+    return h.response({ error: "Internal Server Error" }).code(500);
   }
 };
 
-exports.getCategoryLeavesForUser = async function (request, h) {
-  try {
-    const userId = request.params.id;
-    const leaveId = request.params.leaveid;
-    const user = await userModel.fetchTotalCategoryLeavesForUser(
-      userId,
-      leaveId
-    );
-    if (!user) return h.response("User not found !").code(404);
-    else return h.response(user[0]).code(200);
-  } catch (error) {
-    console.log("error occurred !", error.message);
-    return h.response("Internal Server Error").code(500);
-  }
-};
 
-exports.getLeavesCountTakenByUser = async (request, h) => {
-  try {
-    const userId = request.params.userid;
-    const leaveTypeId = request.params.leavetypeid;
-    const user = await userModel.getTakenLeaves(userId, leaveTypeId);
-    if (!user) return h.response("User not found").code(404);
-    else return h.response(user[0]).code(200);
-  } catch (error) {
-    console.log("error occurred ", error.message);
-    return h.response("Internal server error").code(500);
-  }
-};
+
+
+
 
 exports.getRequest = async (request, h) => {
+  const userId = request.params.userId;
+
+  if (!userId || isNaN(userId)) {
+    return h.response({ error: "Invalid user ID" }).code(400);
+  }
+
   try {
-    const userId = request.params.userId;
-    const user = await userModel.getRequests(userId);
-    if (!user) return h.response("user not found").code(404);
-    else return h.response(user).code(200);
+    const requests = await userModel.getRequests(userId);
+
+    if (!requests || requests.length === 0) {
+      return h.response({ message: "No pending requests found" }).code(404);
+    }
+
+    return h.response(requests).code(200);
   } catch (error) {
-    console.log("error occured ", error.message);
-    return h.response("Internal server error").code(500);
+    console.error("Error in getRequest:", error.message);
+    return h.response({ error: "Internal server error" }).code(500);
   }
 };
 
-exports.getPendingRequest = async (request, h) => {
-  try {
-    const userId = request.params.userid;
-    const user = await userModel.getPendingRequests(userId);
-    if (!user) return h.response("User not found").code(404);
-    else return h.response(user).code(200);
-  } catch (error) {
-    console.log("error occurred !", error.message);
-    return h.response("Internal server error").code(500);
-  }
-};
+
+
 exports.getLatestRequests = async (request, h) => {
+  const userId = request.params.userid;
+
+  if (!userId || isNaN(userId)) {
+    return h.response({ error: "Invalid user ID" }).code(400);
+  }
+
   try {
-    const userId = request.params.userid;
-    const user = await userModel.getLatestRequests(userId);
-    if (!user) return h.response("User not found !").code(404);
-    else return h.response(user).code(200);
+    const requests = await userModel.getLatestRequests(userId);
+
+    if (!requests || requests.length === 0) {
+      return h.response({ message: "No leave requests found" });
+    }
+
+    return h.response(requests).code(200);
   } catch (error) {
-    console.log("error occurred in controller", error.message);
-    return h.response("Internal server error").code(500);
+    console.error("Error in getLatestRequests controller:", error.message);
+    return h.response({ error: "Internal server error" }).code(500);
   }
 };
+
 exports.getInfo = async(request,h)=>{
   try{
     const userId = request.params.id;
@@ -111,6 +111,7 @@ exports.getManagerLists = async (request, h) => {
   }
 };
 
+
 exports.getEmployeeTypes = async (request, h) => {
   try {
     const types = await userModel.fetchEmployeeTypes();
@@ -123,9 +124,14 @@ exports.getEmployeeTypes = async (request, h) => {
 exports.getFloaterHolidays = async (request, h) => {
   try {
     const floaters = await userModel.getFloaterHolidays();
+
+    if (!floaters || floaters.length === 0) {
+      return h.response({ message: "No floater holidays found" }).code(404);
+    }
+
     return h.response(floaters).code(200);
   } catch (err) {
-    console.error("Error fetching floater holidays:", err);
+    console.error("Error fetching floater holidays:", err.message);
     return h.response({ error: "Failed to fetch floater holidays" }).code(500);
   }
 };
