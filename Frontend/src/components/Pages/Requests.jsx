@@ -3,6 +3,7 @@ import Side_nav from "../Side_nav";
 import "../../style/requests.css";
 import Pending_card from "../Pending_card";
 import { Token } from "../Token";
+import BASE_URL from "../url";
 
 function Requests() {
   const { decode, token } = Token();
@@ -17,7 +18,7 @@ function Requests() {
   useEffect(() => {
     if (!token || !decode?.id) return;
 
-    fetch(`http://localhost:1110/userswithrequest/${decode.id}`, {
+    fetch(`${BASE_URL}/userswithrequest/${decode.id}`, {
       headers: {
         Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",

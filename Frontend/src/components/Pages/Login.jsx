@@ -4,6 +4,7 @@ import "../../style/login.css";
 import { useToaster, Message, Button } from "rsuite";
 import Background from "../../assets/Background_edited.jpg";
 import { jwtDecode } from "jwt-decode";
+import BASE_URL from "../url";
 function Login() {
   const navigate = useNavigate();
 
@@ -41,7 +42,7 @@ function Login() {
     setIsSubmitting(true);
   
     try {
-      const response = await fetch(`http://localhost:1110/login`, {
+      const response = await fetch(`${BASE_URL}/login`, {
         method: "POST",
         headers: {
           "content-type": "application/json",

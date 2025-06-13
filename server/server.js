@@ -11,7 +11,10 @@ async function serverInit() {
 
     routes: {
       cors: {
-        origin: ["http://localhost:5173"],
+        origin: [
+            "http://localhost:5173",               
+            "https://lms-fullstack-ebon.vercel.app" 
+          ],
         credentials: true,
       },
     },

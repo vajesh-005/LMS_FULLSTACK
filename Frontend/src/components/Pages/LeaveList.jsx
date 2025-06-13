@@ -5,6 +5,7 @@ import LeaveTypeCard from "../LeaveTypeCard";
 import "../../style/leave_list.css";
 import LeaveRules from "../LeaveRules";
 import {Token} from '../Token'
+import { BASE_URL} from '../url';
 function LeaveList() {
   const [leaveType, setLeaveType] = useState([]);
   const {decode , token} = Token();
@@ -12,7 +13,7 @@ function LeaveList() {
 
   useEffect(() => {
     if (decode?.id && token) {
-      fetch(`http://localhost:1110/leaveslist/${decode.id}`, {
+      fetch(`${BASE_URL}/leaveslist/${decode.id}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },

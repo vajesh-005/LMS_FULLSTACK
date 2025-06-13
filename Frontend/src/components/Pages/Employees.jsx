@@ -28,7 +28,7 @@ function Employees() {
   useEffect(() => {
     if (!decode?.id) return;
 
-    fetch(`http://localhost:1110/mappedusers/${decode.id}/${decode.role}`, {
+    fetch(`${BASE_URL}/mappedusers/${decode.id}/${decode.role}`, {
       headers: {
         Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",
@@ -45,7 +45,7 @@ function Employees() {
   useEffect(() => {
     if (!decode?.id) return;
   
-    fetch(`http://localhost:1110/mappedusers/${decode.id}/${decode.role}`, {
+    fetch(`${BASE_URL}/mappedusers/${decode.id}/${decode.role}`, {
       headers: {
         Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",

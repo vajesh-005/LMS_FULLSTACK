@@ -6,6 +6,7 @@ import TeamLeaveCalendar from "./TeamLeaveCalendar";
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import '../../style/common-calendar.css'
 import Side_nav from "../Side_nav";
+import BASE_URL from '../url';
 
 const localizer = momentLocalizer(moment);
 const COLORS = {
@@ -47,7 +48,7 @@ export default function CalendarView() {
       const year = date.getFullYear();
 
       const res = await fetch(
-        `http://localhost:1110/calendar/events/${decode.id}?year=${year}&month=${month}`,
+        `${BASE_URL}/calendar/events/${decode.id}?year=${year}&month=${month}`,
         { headers: { Authorization: `Bearer ${token}` } }
       );
       const data = await res.json();
