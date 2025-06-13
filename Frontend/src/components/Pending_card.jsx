@@ -1,4 +1,4 @@
-import "../style/Pending_card.css";
+import "../style/pending_card.css";
 import { useState } from "react";
 import { Token } from "./Token";
 import BASE_URL from "./url";

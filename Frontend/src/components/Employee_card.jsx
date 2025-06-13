@@ -1,5 +1,5 @@
 import React from "react";
-import "../style/Employee_card.css";
+import "../style/employee_card.css";
 import {Whisper , Tooltip}from 'rsuite'
 function Employee_card(props) {
   console.log(props.data);

@@ -1,5 +1,5 @@
 import React from "react";
-import "../style/LeaveTypeCard.css";
+import "../style/leaveTypeCard.css";
 
 function LeaveTypeCard({ data }) {
   const typeCodeHandler = (name) => {
