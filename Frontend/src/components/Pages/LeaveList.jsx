@@ -5,7 +5,7 @@ import LeaveTypeCard from "../LeaveTypeCard";
 import "../../style/leave_list.css";
 import LeaveRules from "../LeaveRules";
 import {Token} from '../Token'
-import { BASE_URL} from '../url';
+import BASE_URL from '../url';
 function LeaveList() {
   const [leaveType, setLeaveType] = useState([]);
   const {decode , token} = Token();
