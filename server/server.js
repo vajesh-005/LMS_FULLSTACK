@@ -2,6 +2,8 @@ require("dotenv").config();
 const hapi = require("@hapi/hapi");
 const { user } = require("./plugins/user");
 const { leave } = require("./plugins/leave");
+const path = require("path");
+
 require("./cron_job/cron");
 
 async function serverInit() {
@@ -19,9 +21,23 @@ async function serverInit() {
       },
     },
   });
-
+  await server.register(require('@hapi/inert'));
   await server.register(user);
   await server.register(leave);
+
+  // Serve static files from Frontend/dist
+server.route({
+  method: "GET",
+  path: "/{param*}",
+  handler: {
+    directory: {
+      path: path.join(__dirname, "..", "Frontend", "dist"),
+      index: ["index.html"],
+    },
+  },
+});
+
+
   await server.start();
 
   console.log("Server started at:", server.info.uri);
