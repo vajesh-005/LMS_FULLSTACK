@@ -55,7 +55,7 @@ exports.getRequest = async (request, h) => {
     const requests = await userModel.getRequests(userId);
 
     if (!requests || requests.length === 0) {
-      return h.response({ message: "No pending requests found" }).code(404);
+      return h.response({ message: "No pending requests found" });
     }
 
     return h.response(requests).code(200);
