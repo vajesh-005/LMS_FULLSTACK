@@ -5,38 +5,36 @@ const { leave } = require("./plugins/leave");
 const path = require("path");
 
 require("./cron_job/cron");
-
 async function serverInit() {
   const server = hapi.server({
-    port: process.env.PORT || 1110,
+    port: process.env.DB_PORT || 1110,
     host: "0.0.0.0",
 
     routes: {
       cors: {
         origin: [
-            "http://localhost:5173",               
-            "https://lms-fullstack-ebon.vercel.app" 
-          ],
+          "http://localhost:5173",
+          "https://lms-fullstack-ebon.vercel.app",
+        ],
         credentials: true,
       },
     },
   });
-  await server.register(require('@hapi/inert'));
+  await server.register(require("@hapi/inert"));
   await server.register(user);
   await server.register(leave);
 
   // Serve static files from Frontend/dist
-server.route({
-  method: "GET",
-  path: "/{param*}",
-  handler: {
-    directory: {
-      path: path.join(__dirname, "..", "Frontend", "dist"),
-      index: ["index.html"],
+  server.route({
+    method: "GET",
+    path: "/{param*}",
+    handler: {
+      directory: {
+        path: path.join(__dirname, "..", "Frontend", "dist"),
+        index: ["index.html"],
+      },
     },
-  },
-});
-
+  });
 
   await server.start();
 
