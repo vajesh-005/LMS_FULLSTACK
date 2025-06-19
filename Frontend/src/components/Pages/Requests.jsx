@@ -7,7 +7,6 @@ import BASE_URL from "../url";
 
 function Requests() {
   const { decode, token } = Token();
-  console.log(decode.id);
   const [pendingList, setPendingList] = useState([]);
   const [refreshKey, setRefreshKey] = useState(0);
 
@@ -39,7 +38,6 @@ function Requests() {
       .catch((error) => console.log("Fetch error:", error.message));
   }, [decode?.id, token, refreshKey]);
 
-  console.log(pendingList);
   return (
     <div className="width requests-container">
       <Side_nav />

@@ -2,7 +2,6 @@ import React from "react";
 import "../style/employee_card.css";
 import {Whisper , Tooltip}from 'rsuite'
 function Employee_card(props) {
-  console.log(props.data);
   const data = props.data;
 
   const readableDate = (input) => {

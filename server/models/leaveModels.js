@@ -163,7 +163,6 @@ exports.updateLeaveCount = async (leaveRequestId) => {
   const { employee_id, leave_type_id, start_date, end_date } = dataResult[0];
 
   const dateDifference = countWorkingDays(start_date, end_date);
-  console.log(dateDifference, "diff");
   const updateCategoryCountQuery = `
     UPDATE leave_balance
     SET
@@ -299,7 +298,6 @@ exports.update = async (userId, requestId) => {
 
     const [checkResult] = await db.query(checkAllApprovedQuery, [requestId]);
     const { total_approvals, pending_approvals } = checkResult[0];
-    console.log(total_approvals, pending_approvals, "testing ! ");
 
     if (pending_approvals == 0) {
       await db.query(updateLeaveRequestStatusQuery, [requestId]);

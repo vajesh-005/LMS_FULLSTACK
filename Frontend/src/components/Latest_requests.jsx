@@ -9,7 +9,6 @@ import BASE_URL from "./url";
 import { Whisper, Popover, Button, Modal, Steps, Tooltip } from "rsuite";
 
 function Latest_requests(props) {
-  console.log(props , "request data")
   const whisperRef = useRef(null);
 
   const status_code = {
@@ -73,7 +72,6 @@ function Latest_requests(props) {
           }
         );
         const requestsJson = await requests.json();
-        console.log(requestsJson, "requestsJson");
         setPendingRequest(requestsJson);
       } catch (error) {
         console.log(error.message);

@@ -35,10 +35,7 @@ function Request_form(props) {
       .then(async ([leaveTypeRes, floaterRes]) => {
         const leaveTypes = await leaveTypeRes.json();
         const floaterRaw = await floaterRes.json();
-        console.log("✅ Loaded floater + leave types", {
-          leaveTypes,
-          floaterRaw,
-        });
+
         setleaveTypeName(leaveTypes);
         setFloaterDates(floaterRaw.map((item) => item.date));
       })
@@ -164,7 +161,6 @@ function Request_form(props) {
               startDate={formData.start_date}
               endDate={formData.end_date}
               onDateChange={({ start_date, end_date }) => {
-                console.log("📅 Dates selected:", { start_date, end_date });
                 setFormData((prev) => ({
                   ...prev,
                   start_date,
@@ -206,14 +202,7 @@ function Request_form(props) {
 
                 const shouldDisableFloater = isFloater && !isValidFloaterDate;
 
-                if (isFloater) {
-                  console.log("🛑 Floater Dropdown Disable Check", {
-                    normalizedStart,
-                    normalizedEnd,
-                    isValidFloaterDate,
-                    shouldDisableFloater,
-                  });
-                }
+
 
                 return (
                   <option

@@ -36,7 +36,6 @@ function Dashboard_leave_details(props) {
     fetchAll();
   }, [props.id, props.refreshKey]);
 
-  console.log(leaveRemaining, "checking");
 
   return (
     <div className="dashboard-leaves-details">

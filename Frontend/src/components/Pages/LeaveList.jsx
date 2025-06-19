@@ -9,7 +9,6 @@ import BASE_URL from '../url';
 function LeaveList() {
   const [leaveType, setLeaveType] = useState([]);
   const {decode , token} = Token();
-  console.log(decode);
 
   useEffect(() => {
     if (decode?.id && token) {
@@ -24,7 +23,6 @@ function LeaveList() {
     }
   }, [decode?.id, token]);
 
-  console.log(leaveType);
 
   return (
     <div className="leave-list-container width">

@@ -24,7 +24,6 @@ function Employees() {
     emp_type_id: "",
   });
 
-  console.log(employees);
   useEffect(() => {
     if (!decode?.id) return;
 
@@ -102,7 +101,6 @@ function Employees() {
   };
 
   const handleSubmit = async () => {
-    console.log(formData, "data !");
     try {
       const response = await fetch(`${BASE_URL}/user`, {
         method: "POST",
@@ -111,7 +109,6 @@ function Employees() {
       });
 
       const result = await response.json();
-      console.log(result, "response ! ");
       if (result) {
         setShowModal(false);
       } else {
@@ -121,7 +118,6 @@ function Employees() {
       console.error(err);
     }
   };
-  console.log(managers, "managers !");
   return (
     <div className="width employees-container">
       <Side_nav />

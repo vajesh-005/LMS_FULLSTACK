@@ -194,7 +194,6 @@ exports.createUser = async (
       0,
     ]);
 
-    console.log(leaveBalanceRows);
 
     if (leaveBalanceRows.length > 0) {
       const leaveBalanceQuery = `

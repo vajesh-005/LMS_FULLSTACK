@@ -8,7 +8,6 @@ exports.verifyToken = async (request, h) => {
 
   try {
     const token = authHeader.split(" ")[1];
-    console.log("printed from verification", token);
     const secret = process.env.JWT_SECRET;
     if (!secret) {
       console.error("JWT_SECRET is not defined in .env");
@@ -17,7 +16,6 @@ exports.verifyToken = async (request, h) => {
 
     const decoded = jwt.verify(token, secret);
     request.auth = { credentials: decoded };
-    console.log(decoded, "decoded");
     return h.continue;
   } catch (error) {
     console.log("error occurred in verification ", error.message);
