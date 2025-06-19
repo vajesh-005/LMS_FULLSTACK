@@ -84,7 +84,7 @@ module.exports = [
   },
   {
     method: "GET",
-    path: "/latestleaverequest/{userid}",         //requirred
+    path: "/latest-leave-request/{userid}",         //requirred
     handler: userController.getLatestRequests,
     options: {
       pre: [{ method: verifyToken }],

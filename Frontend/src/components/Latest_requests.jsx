@@ -65,7 +65,7 @@ function Latest_requests(props) {
       const token = localStorage.getItem("token");
       try {
         const requests = await fetch(
-          `${BASE_URL}/latestleaverequest/${props.id}`,
+          `${BASE_URL}/latest-leave-request/${props.id}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
