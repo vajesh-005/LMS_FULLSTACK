@@ -107,7 +107,7 @@ function Request_form(props) {
     setIsSubmitting(true);
 
     try {
-      const response = await fetch(`${BASE_URL}/requestleave/${props.id}`, {
+      const response = await fetch(`${BASE_URL}/request-leave/${props.id}`, {
         method: "POST",
         headers: {
           "content-type": "application/json",
