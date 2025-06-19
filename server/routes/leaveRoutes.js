@@ -5,7 +5,7 @@ const validator = require("../validation/validator");
 module.exports = [
   {
     method: "POST",
-    path: "/requestleave/{id}",
+    path: "/request-leave/{id}",
     handler: leaveController.requestLeaveById,
     options: {
       pre: [{ method: verifyToken }],
@@ -21,7 +21,7 @@ module.exports = [
   },
   {
     method: "PUT",
-    path: "/cancelleave/{leaverequestid}",
+    path: "/cancel-leave/{leaverequestid}",
 
     handler: leaveController.canceleavebyId, //requirred
     options: {
@@ -39,7 +39,7 @@ module.exports = [
 
   {
     method: "GET",
-    path: "/totalleavesused/{userid}",
+    path: "/total-leaves-used/{userid}",
     handler: leaveController.getleavesUsed, //requirred
     options: {
       pre: [{ method: verifyToken }],
@@ -47,7 +47,7 @@ module.exports = [
   },
   {
     method: "GET",
-    path: "/leaveslist/{userid}",
+    path: "/leaves-list/{userid}",
     handler: leaveController.getLeavesList, //requirred
     options: {
       pre: [{ method: verifyToken }],
@@ -56,7 +56,7 @@ module.exports = [
 
   {
     method: "GET",
-    path: "/leavename/{userid}",
+    path: "/leave-name/{userid}",
     handler: leaveController.getName, //requirred
     options: {
       pre: [{ method: verifyToken }],

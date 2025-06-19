@@ -52,7 +52,7 @@ module.exports = [
   },  
   {
     method: "GET",
-    path: "/mappedusers/{userid}/{role}",
+    path: "/mapped-users/{userid}/{role}",
     handler: userController.getAllusers,  //requirred
     options: {
       pre: [{ method: verifyToken }],
@@ -76,7 +76,7 @@ module.exports = [
   },
   {
     method: "GET",
-    path: "/userswithrequest/{userId}",
+    path: "/users-with-request/{userId}",
     handler: userController.getRequest,  //requirred
     options: {
       pre: [{ method: verifyToken }],

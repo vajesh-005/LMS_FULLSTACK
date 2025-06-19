@@ -25,7 +25,7 @@ function Request_form(props) {
   // Fetch leave types + floater dates
   useEffect(() => {
     Promise.all([
-      fetch(`${BASE_URL}/leavename/${props.id}`, {
+      fetch(`${BASE_URL}/leave-name/${props.id}`, {
         headers: { Authorization: `Bearer ${token}` },
       }),
       fetch(`${BASE_URL}/holidays/floater`, {

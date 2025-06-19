@@ -36,7 +36,7 @@ function Latest_requests(props) {
   const handleCancel = async () => {
     try {
       const { token } = Token();
-      const response = await fetch(`${BASE_URL}/cancelleave/${selectedId}`, {
+      const response = await fetch(`${BASE_URL}/cancel-leave/${selectedId}`, {
         method: "PUT",
         headers: {
           Authorization: `Bearer ${token}`,

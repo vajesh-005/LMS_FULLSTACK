@@ -13,7 +13,7 @@ function LeaveList() {
 
   useEffect(() => {
     if (decode?.id && token) {
-      fetch(`${BASE_URL}/leaveslist/${decode.id}`, {
+      fetch(`${BASE_URL}/leaves-list/${decode.id}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },

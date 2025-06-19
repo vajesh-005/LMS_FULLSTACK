@@ -18,7 +18,7 @@ function Requests() {
   useEffect(() => {
     if (!token || !decode?.id) return;
 
-    fetch(`${BASE_URL}/userswithrequest/${decode.id}`, {
+    fetch(`${BASE_URL}/users-with-request/${decode.id}`, {
       headers: {
         Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",
