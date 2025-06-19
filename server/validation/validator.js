@@ -70,5 +70,13 @@ exports.leaveRequestSchema = {
         "string.min": "Reason must be at least 3 characters",
         "any.required": "Reason is required",
       }),
+      start_day_type: Joi.number()
+      .valid(0, 1, 2)
+      .default(0),
+    
+    end_day_type: Joi.number()
+      .valid(0, 1, 2)
+      .default(0),
+    
     }),
   };

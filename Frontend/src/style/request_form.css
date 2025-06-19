@@ -32,7 +32,7 @@ margin: 5px;
   flex: 2.5;
   border-left: 1.5px solid #26262d;
   margin: 5px;
-  gap: 20px;
+  gap: 5px;
 }
 .leave-request-title {
   color: #263238;
@@ -92,10 +92,10 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   flex-direction: column;
   align-items: center;
   color: #415a77;
-  gap: 10px;
+  gap: 5px;
 
 }
-.leave-type-title , .reason-title {
+.leave-type-title , .reason-title , .leave-duration-title {
   color: #0d1b2a;
   font-size: 20px;
   font-weight: 700;
@@ -108,6 +108,24 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   border: 1px solid #898d93;
   border-radius: 5px;
   color: black;
+}
+.isHalfDay{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+}
+.partial-days-menu{
+  width: 43% !important;
+}
+.dropdown-div{
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+.single{
+  width: 90% !important;
 }
 
 .dropdown-menu:focus{
@@ -133,8 +151,8 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   border-radius: 5px;
   color: black;
   font-family: Arial, Helvetica, sans-serif;
-  height: 80px;
-  width: 90%;
+  height: 60px;
+  width: 86%;
   outline: none;
   padding:4px;
 }

@@ -16,6 +16,8 @@ function Request_form(props) {
     start_date: "",
     end_date: "",
     reason: "",
+    start_day_type: 0,
+    end_day_type: 0,
   });
 
   const [leaveTypeName, setleaveTypeName] = useState([]);
@@ -48,11 +50,11 @@ function Request_form(props) {
     const isValidFloaterDate =
       normalizedStart === normalizedEnd &&
       floaterDates.includes(normalizedStart);
-  
+
     const floater = leaveTypeName.find((t) =>
       t.name.toLowerCase().includes("floater")
     );
-  
+
     if (isValidFloaterDate && floater) {
       // Auto-select floater if not already selected
       if (formData.leave_type_id !== floater.id) {
@@ -71,13 +73,15 @@ function Request_form(props) {
       }
     }
   }, [formData.start_date, formData.end_date, floaterDates, leaveTypeName]);
-  
 
   const handleChange = (event) => {
     const { name, value } = event.target;
+
+    const numericFields = ["leave_type_id", "start_day_type", "end_day_type"];
+
     setFormData((prev) => ({
       ...prev,
-      [name]: name === "leave_type_id" ? parseInt(value, 10) : value,
+      [name]: numericFields.includes(name) ? parseInt(value, 10) : value,
     }));
   };
 
@@ -202,8 +206,6 @@ function Request_form(props) {
 
                 const shouldDisableFloater = isFloater && !isValidFloaterDate;
 
-
-
                 return (
                   <option
                     key={type.id}
@@ -217,6 +219,65 @@ function Request_form(props) {
                 );
               })}
             </select>
+          </div>
+          <div className="isHalfDay">
+            <div className="leave-duration-title">Leave duration </div>
+            <div className="dropdown-div">
+              {formData.start_date &&
+              formData.end_date &&
+              formData.start_date === formData.end_date ? (
+                // Single-day leave
+                <select
+                  className="dropdown-menu partial-days-menu single"
+                  name="start_day_type"
+                  value={formData.start_day_type}
+                  onChange={handleChange}
+                >
+                  {formData.start_day_type === "" && (
+                    <option disabled value="" hidden>
+                      Day type
+                    </option>
+                  )}
+                  <option value={0}>Full day</option>
+                  <option value={1}>First half</option>
+                  <option value={2}>Second half</option>
+                </select>
+              ) : (
+                <>
+                  <select
+                    className="dropdown-menu partial-days-menu"
+                    name="start_day_type"
+                    value={formData.start_day_type}
+                    onChange={handleChange}
+                  >
+                    {formData.start_day_type === "" && (
+                      <option disabled value="" hidden>
+                        Start day type
+                      </option>
+                    )}
+                    <option value={0}>Full day</option>
+                    <option value={1}>First half</option>
+                    <option value={2}>Second half</option>
+                  </select>
+
+                  <select
+                    className="dropdown-menu partial-days-menu"
+                    name="end_day_type"
+                    value={formData.end_day_type}
+                    onChange={handleChange}
+                  >
+                    {formData.end_day_type === "" && (
+                      <option disabled value="" hidden>
+                        End day type
+                      </option>
+                    )}
+                    <option value={0}>Full day</option>
+                    <option value={1}>First half</option>
+                    <option value={2}>Second half</option>
+                  </select>
+                </>
+              )}
+            </div>
           </div>
 
           <div className="reason">

@@ -4,13 +4,15 @@ const { db } = require('../configuration/db');
 exports.requestLeaveById = async (request, h) => {
   try {
     const userId = request.params.id;
-    const { leave_type_id, start_date, end_date, reason } = request.payload;
+    const { leave_type_id, start_date, end_date, reason, start_day_type = 0, end_day_type = 0 } = request.payload;
     const user = await leaveModel.putLeaveRequestForUser(
       userId,
       leave_type_id,
       start_date,
       end_date,
-      reason
+      reason,
+      start_day_type,
+      end_day_type
     );
     if (!user) return h.response("User not found").code(404);
     else return h.response(user).code(200);
@@ -19,6 +21,7 @@ exports.requestLeaveById = async (request, h) => {
     return h.response("Internal server error ! ").code(500);
   }
 };
+
 exports.canceleavebyId = async (request, h) => {
   try {
     const leaveRequestId = request.params.leaverequestid;
@@ -187,3 +190,18 @@ exports.getHolidays = async (request, h) => {
     return h.response({ error: "Internal Server Error" }).code(500);
   }
 };
+
+
+// exports.updatebalance = async (request , h)=>{
+//   const requestId = request.params.requestid;
+
+//   try{
+//     const response = await leaveModel.updateLeaveCount(requestId);
+//     if(!response) return h.response({message : 'error in controller'}).code(404);
+//     return response
+//   }
+//   catch(error){
+//     console.log(error)
+//     return h.response({messsage : "internal server error"}).code(500);
+//   }
+// }

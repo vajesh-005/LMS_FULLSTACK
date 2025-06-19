@@ -36,7 +36,11 @@ module.exports = [
       pre: [{ method: verifyToken }],
     },
   },
-
+// {
+//   method : 'PATCH',
+//   path : "/update-leave-count/{requestid}",
+//   handler: leaveController.updatebalance
+// },
   {
     method: "GET",
     path: "/total-leaves-used/{userid}",
@@ -70,4 +74,5 @@ module.exports = [
       pre: [{ method: verifyToken }],
     },
   },
+
 ];

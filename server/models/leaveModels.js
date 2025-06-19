@@ -1,5 +1,5 @@
 const { db } = require("../configuration/db");
-const moment = require('moment');
+const moment = require("moment");
 const status_approved = 200;
 const status_pending = 100;
 
@@ -35,12 +35,40 @@ WHERE employee_id = ?
   else return { success: true };
 };
 
+function calculateLeaveDays(
+  startDate,
+  endDate,
+  startDayType = 0,
+  endDayType = 0
+) {
+  const workingDays = countWorkingDays(startDate, endDate);
+
+  let leaveDays;
+
+  if (workingDays === 1) {
+    // Same-day leave
+    if (startDayType === 1 && endDayType === 2) return 1;
+    if (startDayType === 1 && endDayType === 1) return 0.5;
+    if (startDayType === 2 && endDayType === 2) return 0.5;
+    return 1; // Full day
+  }
+
+  // Multi-day leave
+  leaveDays = workingDays;
+  if (startDayType === 1 || startDayType === 2) leaveDays -= 0.5;
+  if (endDayType === 1 || endDayType === 2) leaveDays -= 0.5;
+
+  return leaveDays;
+}
+
 exports.putLeaveRequestForUser = async (
   userId,
   leave_type_id,
   start_date,
   end_date,
-  reason
+  reason,
+  start_day_type,
+  end_day_type
 ) => {
   const duplicateCheck = await exports.checkOverlapping(
     userId,
@@ -61,7 +89,12 @@ exports.putLeaveRequestForUser = async (
   }
 
   const { remaining_leaves } = checkResults[0];
-  const dateDifference = countWorkingDays(start_date, end_date);
+  const leaveDays = calculateLeaveDays(
+    start_date,
+    end_date,
+    start_day_type,
+    end_day_type
+  );
 
   const leaveTypeQuery = `SELECT name FROM leave_type WHERE id = ?`;
   const [leaveTypeResult] = await db.query(leaveTypeQuery, [leave_type_id]);
@@ -74,30 +107,33 @@ exports.putLeaveRequestForUser = async (
   let approvalsNeeded = 1;
 
   if (leaveTypeName.trim() === "Sick Leave") {
-    if (dateDifference === 1 && remaining_leaves > 0) {
-      approvalsNeeded = 0; 
-    } else if (remaining_leaves >= dateDifference) {
+    if (leaveDays <= 1 && remaining_leaves >= leaveDays) {
+      approvalsNeeded = 0;
+    } else if (remaining_leaves >= leaveDays) {
       approvalsNeeded = 0;
     } else {
       approvalsNeeded = 1;
     }
   } else {
-    if (dateDifference > 5) approvalsNeeded = 3;
-    else if (dateDifference > 1) approvalsNeeded = 2;
-    else if (remaining_leaves >= dateDifference) approvalsNeeded = 1;
+    if (leaveDays > 5) approvalsNeeded = 3;
+    else if (leaveDays > 1) approvalsNeeded = 2;
+    else if (remaining_leaves >= leaveDays) approvalsNeeded = 1;
     else approvalsNeeded = 2;
   }
 
   if (approvalsNeeded === 0) {
-    const insertQuery = `INSERT INTO leave_request(employee_id, leave_type_id, start_date, end_date, reason, status , requested_at)
-                         VALUES (?, ?, ?, ?, ?, ${status_approved},NOW()) `;
+    const insertQuery = `INSERT INTO leave_request(employee_id, leave_type_id, start_date, end_date, reason, status, requested_at, start_day_type, end_day_type)
+                     VALUES (?, ?, ?, ?, ?, ${status_approved}, NOW(), ?, ?)`;
     const [result] = await db.query(insertQuery, [
       userId,
       leave_type_id,
       start_date,
       end_date,
       reason,
+      start_day_type,
+      end_day_type,
     ]);
+
     await exports.updateLeaveCount(result.insertId);
     return {
       message: "Auto-approved sick leave. Leave count updated.",
@@ -105,15 +141,18 @@ exports.putLeaveRequestForUser = async (
     };
   } else {
     // Insert leave request
-    const insertQuery = `INSERT INTO leave_request(employee_id, leave_type_id, start_date, end_date, reason, status, requested_at)
-                         VALUES (?, ?, ?, ?, ?, ${status_pending} , NOW())`;
+    const insertQuery = `INSERT INTO leave_request(employee_id, leave_type_id, start_date, end_date, reason, status, requested_at, start_day_type, end_day_type)
+    VALUES (?, ?, ?, ?, ?, ${status_pending}, NOW(), ?, ?)`;
     const [result] = await db.query(insertQuery, [
       userId,
       leave_type_id,
       start_date,
       end_date,
       reason,
+      start_day_type,
+      end_day_type,
     ]);
+
     const leaveRequestId = result.insertId;
 
     // Get approvers dynamically using manager hierarchy
@@ -154,30 +193,42 @@ exports.putLeaveRequestForUser = async (
 
 exports.updateLeaveCount = async (leaveRequestId) => {
   const dataQuery = `
-    SELECT employee_id, leave_type_id, start_date, end_date
+    SELECT employee_id, leave_type_id, start_date, end_date, start_day_type, end_day_type
     FROM leave_request
     WHERE id = ?
   `;
 
   const [dataResult] = await db.query(dataQuery, [leaveRequestId]);
-  const { employee_id, leave_type_id, start_date, end_date } = dataResult[0];
 
-  const dateDifference = countWorkingDays(start_date, end_date);
+  if (!dataResult.length) {
+    return { message: "Leave request not found!" };
+  }
+
+  const {
+    employee_id,
+    leave_type_id,
+    start_date,
+    end_date,
+    start_day_type,
+    end_day_type,
+  } = dataResult[0];
+
+  const leaveDays = calculateLeaveDays(start_date, end_date, start_day_type, end_day_type);
+
   const updateCategoryCountQuery = `
     UPDATE leave_balance
-    SET
-      leaves_taken = leaves_taken + ?
+    SET leaves_taken = leaves_taken + ?
     WHERE employee_id = ? AND leave_type_id = ?
   `;
 
   try {
     await db.query(updateCategoryCountQuery, [
-      dateDifference,
+      leaveDays,
       employee_id,
       leave_type_id,
     ]);
 
-    return "Successfully updated! 😁";
+    return "Successfully updated! ";
   } catch (error) {
     console.log("Error occurred in model!", error.message);
     return {
@@ -185,6 +236,7 @@ exports.updateLeaveCount = async (leaveRequestId) => {
     };
   }
 };
+
 
 exports.cancelLeaveRequest = async (leaveRequestId) => {
   const query = `
@@ -201,9 +253,6 @@ exports.cancelLeaveRequest = async (leaveRequestId) => {
   }
 };
 
-
-
-
 exports.getLeaves = async (userId) => {
   const query = `
     SELECT SUM(COALESCE(leaves_used, 0)) AS total_leaves_used
@@ -219,7 +268,6 @@ exports.getLeaves = async (userId) => {
     return [];
   }
 };
-
 
 exports.getLeavesLists = async (userId) => {
   const query = `
@@ -241,7 +289,6 @@ exports.getLeavesLists = async (userId) => {
   }
 };
 
-
 exports.getNames = async (userId) => {
   const query = `
     SELECT lt.id, lt.name AS name 
@@ -259,7 +306,6 @@ exports.getNames = async (userId) => {
     return { message: "Failed to get names" };
   }
 };
-
 
 exports.update = async (userId, requestId) => {
   const updateQuery = `
@@ -329,7 +375,11 @@ exports.reject = async (userId, requestId, comment) => {
 
   try {
     const [leaveResult] = await db.query(updateLeaveQuery, [requestId]);
-    const [approvalResult] = await db.query(updateApprovalQuery, [comment, userId, requestId]);
+    const [approvalResult] = await db.query(updateApprovalQuery, [
+      comment,
+      userId,
+      requestId,
+    ]);
 
     return {
       message: "Updated",
@@ -340,13 +390,6 @@ exports.reject = async (userId, requestId, comment) => {
     throw error;
   }
 };
-
-
-
-
-
-
-
 
 exports.getApprovedLeaves = async (start, end, whereClause, params = []) => {
   const sql = `
@@ -401,6 +444,3 @@ exports.generateWeekOffs = (start, end) => {
   }
   return offs;
 };
-
-
-
