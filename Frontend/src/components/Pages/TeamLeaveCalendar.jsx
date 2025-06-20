@@ -7,18 +7,32 @@ import BASE_URL from "../url";
 const localizer = momentLocalizer(moment);
 const COLORS = {
   peer: {
-    backgroundColor: "#d2e9fb", // soft blue background
-    color: "#1565c0",           // darker blue
+    backgroundColor: "#d2e9fb",
+    color: "#1565c0",
+    borderLeft: "4px solid #1565c0",
   },
-  self: {
-    backgroundColor: "#d4f5dc", // soft green background
-    color: "#2e7d32",           // deeper green
+  me: {
+    backgroundColor: "#d4f5dc",
+    color: "#2e7d32",
+    borderLeft: "4px solid #2e7d32",
+  },
+  manager: {
+    backgroundColor: "#fff3cd",
+    color: "#b8860b",
+    borderLeft: "4px solid #b8860b",
+  },
+  reportee: {
+    backgroundColor: "#f8d7da",
+    color: "#a71d2a",
+    borderLeft: "4px solid #a71d2a",
   },
   "Week Off": {
-    backgroundColor: "#e6e9ec", // soft gray background
-    color: "#495057",           // darker gray
+    backgroundColor: "#f1f3f5",
+    color: "#6c757d",
+    borderLeft: "4px solid #6c757d",
   },
 };
+
 
 
 export default function TeamLeaveCalendar({
@@ -26,7 +40,7 @@ export default function TeamLeaveCalendar({
   user,
   token,
   onNavigate,
-  dayPropGetter, // passed from parent
+  dayPropGetter, 
 }) {
   const [events, setEvents] = useState([]);
 
@@ -46,14 +60,17 @@ export default function TeamLeaveCalendar({
 
       // Map leave events
       const leaveEvents = data
-        .filter((ev) => ["peer", "self"].includes(ev.category))
-        .map((ev) => ({
-          title: ev.name,
-          start: normalizeUtc(ev.start_date),
-          end: moment(normalizeUtc(ev.end_date)).add(1, "day").toDate(),
-          allDay: true,
-          category: ev.category,
-        }));
+      .filter((ev) =>
+        ["me", "peer", "manager", "reportee"].includes(ev.category)
+      )
+      .map((ev) => ({
+        title: `${ev.name} (${ev.category})`,
+        start: normalizeUtc(ev.start_date),
+        end: moment(normalizeUtc(ev.end_date)).add(1, "day").toDate(),
+        allDay: true,
+        category: ev.category,
+      }));
+    
 
       // Generate week-off events using the same utility logic
       const weekOffs = [];
@@ -66,7 +83,7 @@ export default function TeamLeaveCalendar({
           weekOffs.push({
             title: "Week Off",
             start: day,
-            end: day,
+            end: moment(day).add(1, "day").toDate(),
             allDay: true,
             category: "Week Off",
           });
@@ -78,8 +95,8 @@ export default function TeamLeaveCalendar({
       const allEvents = [...leaveEvents, ...weekOffs];
       allEvents.sort((a, b) => {
         // ensure week offs stay in calendar but leave coloring is separate
-        if (a.category === "peer" && b.category === "self") return -1;
-        if (a.category === "self" && b.category === "peer") return 1;
+        if (a.category === "peer" && b.category === "me") return -1;
+        if (a.category === "me" && b.category === "peer") return 1;
         return 0;
       });
 
@@ -91,36 +108,79 @@ export default function TeamLeaveCalendar({
 
   const eventStyleGetter = (event) => {
     const colorConfig = COLORS[event.category] || {
-      backgroundColor: "#ccc",
-      color: "#333",
+      backgroundColor: "#e9ecef",
+      color: "#343a40",
+      borderLeft: "4px solid #343a40",
     };
+  
+    const isWeekOff = event.title === "Week Off";
   
     return {
       style: {
         backgroundColor: colorConfig.backgroundColor,
         color: colorConfig.color,
-        border: `1px solid ${colorConfig.color}`,
-        borderRadius: "5px",
-        padding: "2px 6px",
-        fontSize: "0.85rem",
+        borderLeft: colorConfig.borderLeft,
+        borderRadius: "4px",
+        fontSize: "0.75rem",
         fontWeight: 500,
+        whiteSpace: "normal",
+        overflow: "hidden",
+        textOverflow: "ellipsis",
+        // padding: "2px 4px",
+        lineHeight: 1.2,
+        ...(isWeekOff && {
+          textAlign: "center",
+          fontSize: "0.8rem",
+        }),
       },
     };
   };
   
+  
+  const CustomEvent = ({ event }) => (
+    <div
+      title={event.title} // native tooltip on hover
+      style={{
+        fontSize: "0.65rem",
+        whiteSpace: "nowrap",       // 🔑 one line
+        overflow: "hidden",         // 🔑 hide overflow
+        textOverflow: "ellipsis",   // 🔑 show ...
+      }}
+    >
+      {event.title}
+    </div>
+  );
+  
+  
+  
 
   return (
     <BigCalendar
-      localizer={localizer}
-      events={events}
-      startAccessor="start"
-      endAccessor="end"
-      date={date}
-      onNavigate={onNavigate}          // enable navigation
-      views={["month"]}
-      eventPropGetter={eventStyleGetter}
-      style={{ height: "70vh" }}
-      dayPropGetter={dayPropGetter}    // highlights weekends shading
-    />
+  localizer={localizer}
+  events={events}
+  startAccessor="start"
+  endAccessor="end"
+  date={date}
+  onNavigate={onNavigate}
+  views={["month"]}
+  popup
+  popupOffset={{ x: 10, y: 20 }}
+  showAllEvents={false} // ensure overflow logic kicks in
+  components={{
+    event: CustomEvent, // optional, custom rendering
+  }}
+  dayPropGetter={dayPropGetter}
+  eventPropGetter={eventStyleGetter}
+  style={{ height: "70vh" }}
+
+  messages={{
+    showMore: (total) => `+${total} more`,
+  }}
+    dayLayoutAlgorithm="no-overlap"
+    
+  /** Optional but helpful */
+  // maxRows={2}
+/>
+
   );
 }

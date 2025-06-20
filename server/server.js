@@ -11,15 +11,12 @@ async function serverInit() {
 
     routes: {
       cors: {
-        origin: [
-          "http://localhost:5173",
-          "https://lms-fullstack-ebon.vercel.app",
-        ],
+        origin:process.env.ALLOWED_ORIGINS,
         credentials: true,
       },
     },
   });
-  await server.register(require("@hapi/inert"));
+  // await server.register(require("@hapi/inert"));
   await server.register(user);
   await server.register(leave);
 

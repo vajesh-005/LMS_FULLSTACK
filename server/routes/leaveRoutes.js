@@ -29,6 +29,14 @@ module.exports = [
     },
   },
   {
+    method: 'PUT',
+    path: '/approve/{id}/{request_id}',         //requirred
+    handler : leaveController.updateStatusByrole,
+    options: {
+      pre: [{ method: verifyToken }]
+    }
+  },
+  {
     method: "PUT",
     path: "/reject/{id}/{request_id}",
     handler: leaveController.rejectLeaveByRole, //requirred

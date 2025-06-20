@@ -2,7 +2,8 @@ import React, { useRef, useEffect, useState } from "react";
 import "../style/latest_requests.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEllipsisH } from "@fortawesome/free-solid-svg-icons";
-import No_leaves from '../assets/No_leaves.png';
+import No_leaves from "../assets/No_leaves.png";
+import calculateLeaveDays from "./differenceCounter";
 
 import { Token } from "./Token";
 import BASE_URL from "./url";
@@ -80,19 +81,7 @@ function Latest_requests(props) {
     fetchAll();
   }, [props.id, props.refreshKey, refresh]);
 
-  const getDifference = (startDate, endDate) => {
-    const start = new Date(startDate);
-    const end = new Date(endDate);
-    let count = 0;
-    const current = new Date(start);
-    while (current <= end) {
-      const day = current.getDay();
-      if (day !== 0 && day !== 6) count++;
-      current.setDate(current.getDate() + 1);
-    }
-    return count;
-  };
-
+  
   return (
     <div className="pending-section">
       <p className="title">Latest Leaves</p>
@@ -160,24 +149,36 @@ function Latest_requests(props) {
             <div className="date-and-days">
               <div className="date">
                 {item.start_date &&
-                  new Date(item.start_date).toLocaleDateString()}
+                  new Date(item.start_date).toLocaleDateString("en-GB")}
               </div>
               <div className="date-difference">
-                {getDifference(item.start_date, item.end_date) +
-                  (getDifference(item.start_date, item.end_date) > 1
+                {calculateLeaveDays(
+                  item.start_date,
+                  item.end_date,
+                  item.start_day_type,
+                  item.end_day_type
+                ) +
+                  (calculateLeaveDays(
+                    item.start_date,
+                    item.end_date,
+                    item.start_day_type,
+                    item.end_day_type
+                  ) > 1
                     ? " Days"
                     : " Day")}
               </div>
               <div className="date">
-                {item.end_date && new Date(item.end_date).toLocaleDateString()}
+                {item.end_date &&
+                  new Date(item.end_date).toLocaleDateString("en-GB")}
               </div>
             </div>
           </div>
         ))
       ) : (
         <div className="no-requests-message">
-          <img src={No_leaves} className="no-leaves-img"/>
-          No leave requests applied.</div>
+          <img src={No_leaves} className="no-leaves-img" />
+          No leave requests applied.
+        </div>
       )}
 
       <Modal
@@ -231,20 +232,48 @@ function Latest_requests(props) {
                 <div className="modal-flex-body">
                   <div className="modal-leave-details">
                     <p>
-                      <strong>Name:</strong> {selectedLeaveData.name}
+                      <strong>Name:</strong> {selectedLeaveData.leave_type}
                     </p>
                     <p>
                       <strong>Leave Applied for: </strong>
-                      {getDifference(
-                        selectedLeaveData.start_date,
-                        selectedLeaveData.end_date
-                      )}{" "}
-                      {getDifference(
-                        selectedLeaveData.start_date,
-                        selectedLeaveData.end_date
-                      ) > 1
-                        ? "Days"
-                        : "Day"}
+                      <div>
+                        {/* Leave Duration */}
+                        <div>
+                          {calculateLeaveDays(
+                            selectedLeaveData.start_date,
+                            selectedLeaveData.end_date,
+                            selectedLeaveData.start_day_type,
+                            selectedLeaveData.end_day_type
+                          ) +
+                            (calculateLeaveDays(
+                              selectedLeaveData.start_date,
+                              selectedLeaveData.end_date,
+                              selectedLeaveData.start_day_type,
+                              selectedLeaveData.end_day_type
+                            ) > 1
+                              ? " Days"
+                              : " Day")}
+
+                          {(selectedLeaveData.start_day_type !== 0 ||
+                            selectedLeaveData.end_day_type !== 0) && (
+                            <span className="duration-indication">
+                              {" ("}
+                              {selectedLeaveData.start_day_type === 1 &&
+                                "1st of Start"}
+                              {selectedLeaveData.start_day_type === 2 &&
+                                "2nd of Start"}
+                              {selectedLeaveData.start_day_type !== 0 &&
+                                selectedLeaveData.end_day_type !== 0 &&
+                                " → "}
+                              {selectedLeaveData.end_day_type === 1 &&
+                                "1st of End"}
+                              {selectedLeaveData.end_day_type === 2 &&
+                                "2nd of End"}
+                              {")"}
+                            </span>
+                          )}
+                        </div>
+                      </div>
                     </p>
                     <p>
                       <strong>Reason:</strong>{" "}
@@ -264,13 +293,13 @@ function Latest_requests(props) {
                       <strong>Start Date:</strong>{" "}
                       {new Date(
                         selectedLeaveData.start_date
-                      ).toLocaleDateString()}
+                      ).toLocaleDateString("en-GB")}
                     </p>
                     <p>
                       <strong>End Date:</strong>{" "}
-                      {new Date(
-                        selectedLeaveData.end_date
-                      ).toLocaleDateString()}
+                      {new Date(selectedLeaveData.end_date).toLocaleDateString(
+                        "en-GB"
+                      )}
                     </p>
                     <p>
                       <strong>Status:</strong>{" "}

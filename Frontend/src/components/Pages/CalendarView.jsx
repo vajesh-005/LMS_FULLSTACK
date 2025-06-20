@@ -4,41 +4,39 @@ import { Calendar as BigCalendar, momentLocalizer } from "react-big-calendar";
 import { Token } from "../Token";
 import TeamLeaveCalendar from "./TeamLeaveCalendar";
 import "react-big-calendar/lib/css/react-big-calendar.css";
-import '../../style/common-calendar.css'
+import "../../style/common-calendar.css";
 import Side_nav from "../Side_nav";
-import BASE_URL from '../url';
+import BASE_URL from "../url";
 
 const localizer = momentLocalizer(moment);
 const COLORS = {
   holiday: {
-    backgroundColor: "#f9d7d6", 
-    color: "#d32f2f",            
+    backgroundColor: "#f9d7d6",
+    color: "#d32f2f",
   },
   floater: {
-    backgroundColor: "#f3d6f7", 
-    color: "#7b1fa2",            
+    backgroundColor: "#f3d6f7",
+    color: "#7b1fa2",
   },
   "Week Off": {
-    backgroundColor: "#dce1e6", 
-    color: "#495057",            
+    backgroundColor: "#dce1e6",
+    color: "#495057",
   },
   self: {
-    backgroundColor: "#d2f0d9", 
-    color: "#388e3c",            
+    backgroundColor: "#d2f0d9",
+    color: "#388e3c",
   },
   peer: {
-    backgroundColor: "#c9e3fc", 
-    color: "#1565c0",            
+    backgroundColor: "#c9e3fc",
+    color: "#1565c0",
   },
 };
-
-
 
 export default function CalendarView() {
   const { decode, token } = Token();
   const [commonEvents, setCommonEvents] = useState([]);
   const [date, setDate] = useState(new Date());
-  const [viewMode, setViewMode] = useState("common"); 
+  const [viewMode, setViewMode] = useState("common");
 
   const normalizeUtc = (iso) => moment.utc(iso).local().startOf("day").toDate();
 
@@ -74,79 +72,91 @@ export default function CalendarView() {
   
     return {
       style: {
-        backgroundColor: colorInfo?.backgroundColor || "#e0e0e0", 
-        color: colorInfo?.color || "#333", 
-        border: `1px solid ${colorInfo?.color || "#999"}`,
-        borderRadius: "5px",
+        backgroundColor: colorInfo?.backgroundColor || "#e0e0e0",
+        color: colorInfo?.color || "#333",
+        borderLeft: `4px solid ${colorInfo?.color || "#333"}`,
+        fontSize: "0.85rem",
         fontWeight: 500,
-        padding: "2px 6px",
+        whiteSpace: "normal",
       },
     };
   };
   
 
-  const dayPropGetter = (date) =>
-    [0, 6].includes(moment(date).day())
-      
-
+  const dayPropGetter = (date) => {
+    const isWeekend = [0, 6].includes(moment(date).day());
+    return {
+      style: {
+        backgroundColor: isWeekend ? "#f8f9fa" : "white",
+      },
+    };
+  };
+  
   return (
-    <div  className=" width overall-calendar">
-      <Side_nav/>
+    <div className=" width overall-calendar">
+      <Side_nav />
 
       <div className="grid">
-      <div className="btn-div">
-        <button
-        className="common-calendar-btn"
-          onClick={() => setViewMode("common")}
-          style={{
-            fontWeight: viewMode === "common" ? "bold" : "normal",
-            backgroundColor: viewMode==="common" ? "#1b263b" : "transparent",
-            color: viewMode==="common"? "white" : "#1b263b"
-          }}
-        >
-          Common Calendar
-        </button>
-        <button
-        className="team-calendar-btn"
-          onClick={() => setViewMode("team")}
-          style={{
-            fontWeight: viewMode === "team" ? "bold" : "normal",
-            backgroundColor: viewMode==="team" ? "#1b263b" : "transparent",
-            color: viewMode==="team"? "white" : "#1b263b"
-          }}
-        >
-          Team Calendar
-        </button>
-      </div>
+        <div className="btn-div">
+          <button
+            className="common-calendar-btn"
+            onClick={() => setViewMode("common")}
+            style={{
+              fontWeight: viewMode === "common" ? "bold" : "normal",
+              backgroundColor:
+                viewMode === "common" ? "#1b263b" : "transparent",
+              color: viewMode === "common" ? "white" : "#1b263b",
+            }}
+          >
+            Common Calendar
+          </button>
+          <button
+            className="team-calendar-btn"
+            onClick={() => setViewMode("team")}
+            style={{
+              fontWeight: viewMode === "team" ? "bold" : "normal",
+              backgroundColor: viewMode === "team" ? "#1b263b" : "transparent",
+              color: viewMode === "team" ? "white" : "#1b263b",
+            }}
+          >
+            Team Calendar
+          </button>
+        </div>
 
-      {viewMode === "common" ? (
-        <div className="calendar-container">
-          <h2>Common Calendar</h2>
-          <BigCalendar className="common-calendar"
-            localizer={localizer}
-            events={commonEvents}
-            startAccessor="start"
-            endAccessor="end"
-            date={date}
-            onNavigate={setDate}
-            views={["month"]}
-            eventPropGetter={eventStyleGetter}
-            dayPropGetter={dayPropGetter}
-          />
-        </div>
-      ) : (
-        <div className="calendar-container">
-          <h2>Team Calendar</h2>
-          <TeamLeaveCalendar
-          className="team-calendar"
-            user={decode}
-            date={date}
-            token={token}
-            onNavigate={setDate}
-            dayPropGetter={dayPropGetter}
-          />
-        </div>
-      )}
+        {viewMode === "common" ? (
+          <div className="calendar-container">
+            <h2>Common Calendar</h2>
+            <BigCalendar
+              className="common-calendar"
+              localizer={localizer}
+              events={commonEvents}
+              startAccessor="start"
+              endAccessor="end"
+              date={date}
+              onNavigate={setDate}
+              views={["month"]}
+              popup
+              popupOffset={{ x: 10, y: 20 }}
+              showAllEvents={false}
+              messages={{ showMore: (total) => `+${total} more` }}
+              eventPropGetter={eventStyleGetter}
+              dayPropGetter={dayPropGetter}
+            />
+          </div>
+        ) : (
+          <div className="calendar-container">
+            <h2>Team Calendar</h2>
+            <TeamLeaveCalendar
+              className="team-calendar"
+              user={decode}
+              date={date}
+              token={token} 
+              onNavigate={setDate}
+              dayPropGetter={dayPropGetter}
+              popup
+            />
+          </div>
+        )}
       </div>
     </div>
   );

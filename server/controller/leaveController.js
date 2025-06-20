@@ -95,7 +95,18 @@ exports.getName = async (request, h) => {
     return h.response("Internal server error").code(500);
   }
 };
-
+exports.updateStatusByrole = async (request, h) => {
+  const userId = request.params.id;
+  const requestId = request.params.request_id;
+  try {
+    const user = await leaveModel.update(userId, requestId);
+    if (!user) return h.response("Invalid role or update failed").code(400);
+    return h.response(user).code(200);
+  } catch (error) {
+    console.log("Error occurred in controller !", error.message);
+    return h.response("Internal server error ").code(500);
+  }
+};
 
 exports.rejectLeaveByRole = async (request, h) => {
   const userId = request.params.id;
@@ -140,6 +151,15 @@ exports.getHolidays = async (request, h) => {
     );
     const managerId = userRow?.manager_id;
 
+    const managerLeavesRows = managerId
+  ? await leaveModel.getApprovedLeaves(
+      start,
+      end,
+      "e.id = ?",
+      [managerId]
+    )
+  : [];
+
     const selfLeavesRows = await leaveModel.getApprovedLeaves(
       start,
       end,
@@ -166,15 +186,20 @@ exports.getHolidays = async (request, h) => {
     const holidays = await leaveModel.getHolidays(start, end);
     const weekOffs = leaveModel.generateWeekOffs(start, end);
 
-    const selfLeaves = selfLeavesRows.map((e) => ({ ...e, category: "self" }));
+    const selfLeaves = selfLeavesRows.map((e) => ({ ...e, category: "me" }));
     const reportsLeaves = reportsLeavesRows.map((e) => ({
       ...e,
-      category: "report",
+      category: "reportee",
     }));
     const peersLeaves = peersLeavesRows.map((e) => ({
       ...e,
       category: "peer",
     }));
+    const managerLeaves = managerLeavesRows.map((e) => ({
+      ...e,
+      category: "manager",
+    }));
+    
 
     const events = [
       ...holidays,
@@ -182,6 +207,7 @@ exports.getHolidays = async (request, h) => {
       ...selfLeaves,
       ...reportsLeaves,
       ...peersLeaves,
+      ...managerLeaves,
     ];
 
     return h.response(events).code(200);

@@ -49,10 +49,14 @@ display: none;
   justify-content: center;
 }
 .rs-modal-content {
+  width: 400px;
   color: #ccc;
   background-color: #e0e1dd;
   box-shadow: 0 4px 22px rgba(125, 122, 122, 0.3),
     0 2px 4px rgba(125, 122, 122, 0.2);
+}
+.duration-indication{
+  font-size: 0.7rem;
 }
 .rs-modal-title {
   color: #415a77;

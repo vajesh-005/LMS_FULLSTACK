@@ -75,7 +75,8 @@ exports.getRequests = async (userId) => {
       lr.start_date,
       lr.end_date,
       lr.reason,
-      DATEDIFF(lr.end_date, lr.start_date) + 1 AS date_diff
+      lr.start_day_type,
+      lr.end_day_type
     FROM approval_flow af
     JOIN leave_request lr ON lr.id = af.leave_id
     JOIN employee u ON lr.employee_id = u.id
@@ -106,6 +107,8 @@ exports.getLatestRequests = async (userId) => {
       DATE(lr.end_date) AS end_date,
       lr.status,
       lr.reason,
+      lr.start_day_type,
+      lr.end_day_type,
       lt.name AS leave_type,
       JSON_ARRAYAGG(
         JSON_OBJECT(

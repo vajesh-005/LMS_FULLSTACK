@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "../style/dashboard_top.css";
-import BASE_URL from './url.js';
+import BASE_URL from "./url.js";
 function Dashboard_leave_details(props) {
   const [leaveRemaining, setLeaveRemaining] = useState(null);
 
@@ -13,20 +13,18 @@ function Dashboard_leave_details(props) {
       }
 
       try {
-        const response = await fetch(
-          `${BASE_URL}/users/${props.id}/leaves`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
+        const response = await fetch(`${BASE_URL}/users/${props.id}/leaves`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
 
         if (!response.ok) {
-          throw new Error({message : " response not okay"})
+          throw new Error({ message: " response not okay" });
         }
 
         const data = await response.json();
+      
         setLeaveRemaining(data);
       } catch (err) {
         console.error("Error fetching leave data:", err.message);
@@ -35,22 +33,29 @@ function Dashboard_leave_details(props) {
 
     fetchAll();
   }, [props.id, props.refreshKey]);
+console.log(leaveRemaining , "data");
+const formatLeave = (value) => {
+  const num = parseFloat(value);
+  if (isNaN(num) || num < 0) return 0;
+  return Number.isInteger(num) ? parseInt(num) : num;
+};
 
 
   return (
     <div className="dashboard-leaves-details">
       <div className="days-remaining">
-        <div className="day-count">
-          {Number(leaveRemaining?.remaining_leaves) >= 0
-            ? Number(leaveRemaining.remaining_leaves)
-            : 0}
-        </div>
+      <div className="day-count">
+  {formatLeave(leaveRemaining?.remaining_leaves)}
+</div>
+
         <p>Total remaining days</p>
       </div>
       <div className="days-used">
-        <div className="day-count">
-          {leaveRemaining?.total_leaves_used.split(".")[0] || 0}
-        </div>
+      <div className="day-count">
+  {formatLeave(leaveRemaining?.total_leaves_used || 0)}
+</div>
+
+
         <p>Leaves used </p>
       </div>
     </div>

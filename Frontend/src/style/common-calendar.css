@@ -35,6 +35,9 @@
     color: white !important;
     background-color: #1b263b;
 }
+.rbc-toolbar{
+    margin-bottom: 5px !important;
+}
 .rbc-toolbar-label{
     color: #415a77;
 }

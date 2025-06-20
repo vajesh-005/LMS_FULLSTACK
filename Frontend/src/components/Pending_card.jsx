@@ -3,6 +3,7 @@ import { useState } from "react";
 import { Token } from "./Token";
 import BASE_URL from "./url";
 import { Modal, Form, Button } from "rsuite";
+import calculateLeaveDays from "./differenceCounter";
 
 function Pending_card({ data, refreshKey }) {
   const [showRejectModal, setShowRejectModal] = useState(false);
@@ -13,20 +14,20 @@ function Pending_card({ data, refreshKey }) {
 
   const readableDate = (input) => {
     const date = new Date(input);
-    const day = date.getDate();
-    const month = date.getMonth() + 1;
-    const year = date.getFullYear();
-    return `${day}/${month}/${year}`;
+    return date.toLocaleDateString("en-GB");
   };
 
   const approveRequest = async (userId, requestId) => {
     try {
-      const response = await fetch(`${BASE_URL}/approve/${userId}/${requestId}`, {
-        method: "PUT",
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const response = await fetch(
+        `${BASE_URL}/approve/${userId}/${requestId}`,
+        {
+          method: "PUT",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
 
       if (!response.ok) {
         console.log("Approval failed");
@@ -41,14 +42,17 @@ function Pending_card({ data, refreshKey }) {
 
   const rejectRequest = async (userId, requestId, comment) => {
     try {
-      const response = await fetch(`${BASE_URL}/reject/${userId}/${requestId}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({ comment }),
-      });
+      const response = await fetch(
+        `${BASE_URL}/reject/${userId}/${requestId}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({ comment }),
+        }
+      );
 
       if (!response.ok) {
         console.log("Rejection failed");
@@ -72,12 +76,39 @@ function Pending_card({ data, refreshKey }) {
           </div>
           <div className="leave-details-div">
             <div className="primary-reason">
-              <div className="leave-type-div">Leave type: {item.leave_type}</div>
-              <div className="date-difference-div">Applied for {item.date_diff} day</div>
+              <div className="leave-type-div">
+                Leave type: {item.leave_type}
+              </div>
+              <div className="date-difference-div">
+                Applied for{" "}
+                {calculateLeaveDays(
+                  item.start_date,
+                  item.end_date,
+                  item.start_day_type,
+                  item.end_day_type
+                ) +
+                  (calculateLeaveDays(
+                    item.start_date,
+                    item.end_date,
+                    item.start_day_type,
+                    item.end_day_type
+                  ) > 1
+                    ? " Days"
+                    : " Day")}
+              </div>
               <div className="date-range-div">
-                <div className="start">{readableDate(item.start_date)}</div>
+                <div className="start">
+                  <div>{readableDate(item.start_date)}</div>
+                  <div className="duration-indication">{item.start_day_type === 1 && " (1st Half)"}
+                  {item.start_day_type === 2 && " (2nd Half)"}</div>
+                </div>
+
                 <div className="mid-point">-</div>
-                <div className="end">{readableDate(item.end_date)}</div>
+                <div className="end">
+                  <div>{readableDate(item.end_date)}</div>
+                  <div className="duration-indication">{item.end_day_type === 1 && " (1st Half)"}
+                  {item.end_day_type === 2 && " (2nd Half)"}</div>
+                </div>
               </div>
             </div>
             <div className="main-reason-div">
@@ -107,7 +138,11 @@ function Pending_card({ data, refreshKey }) {
       ))}
 
       {/* MODAL MUST BE INSIDE RETURN */}
-      <Modal open={showRejectModal} onClose={() => setShowRejectModal(false)} size="sm">
+      <Modal
+        open={showRejectModal}
+        onClose={() => setShowRejectModal(false)}
+        size="sm"
+      >
         <Modal.Header>
           <Modal.Title>Reject Request</Modal.Title>
         </Modal.Header>
@@ -127,7 +162,7 @@ function Pending_card({ data, refreshKey }) {
           </Form>
         </Modal.Body>
         <Modal.Footer>
-        <Button appearance="subtle" onClick={() => setShowRejectModal(false)}>
+          <Button appearance="subtle" onClick={() => setShowRejectModal(false)}>
             Cancel
           </Button>
           <Button
@@ -141,7 +176,6 @@ function Pending_card({ data, refreshKey }) {
           >
             Reject
           </Button>
-          
         </Modal.Footer>
       </Modal>
     </div>

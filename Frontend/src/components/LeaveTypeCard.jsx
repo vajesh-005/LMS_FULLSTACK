@@ -9,6 +9,11 @@ function LeaveTypeCard({ data }) {
     splitted.map((item) => (temp += item[0].toUpperCase()));
     return temp;
   };
+  const formatLeave = (value) => {
+    const num = parseFloat(value);
+    if (isNaN(num) || num < 0) return 0;
+    return Number.isInteger(num) ? parseInt(num) : num;
+  };
   return (
     <div className="card-wrapper">
       {data.map((leave, index) => (
@@ -23,13 +28,14 @@ function LeaveTypeCard({ data }) {
           <div className="leaves-remaining-div items">
             <div className="leave-remaining-title">Leaves Remaining</div>
             <div className="remaining-result">
-              {leave.remaining_leaves.split(".")[0]>=0? leave.remaining_leaves.split(".")[0] : 0}
-            </div>
+  {formatLeave(leave.remaining_leaves)}
+</div>
+
           </div>
           <div className="leaves-used-div items">
             <div className="leave-used-title">Leaves used</div>
-            <div className="used-result">{leave.leaves_taken.split(".")[0] || 0}</div>
-          </div>
+            <div className="used-result">{formatLeave(leave.leaves_taken)}</div>
+            </div>
           <div className="description">
             Description:
             <div className="text">{leave.description || "No description."}</div>

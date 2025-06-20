@@ -17,7 +17,7 @@ const countWorkingDays = (startDate, endDate) => {
   return count;
 };
 
-exports.checkOverlapping = async (employee_id, start_date, end_date) => {
+async function checkOverlapping  (employee_id, start_date, end_date) {
   const query = `SELECT *
 FROM leave_request
 WHERE employee_id = ?
@@ -70,7 +70,7 @@ exports.putLeaveRequestForUser = async (
   start_day_type,
   end_day_type
 ) => {
-  const duplicateCheck = await exports.checkOverlapping(
+  const duplicateCheck = await checkOverlapping(
     userId,
     start_date,
     end_date

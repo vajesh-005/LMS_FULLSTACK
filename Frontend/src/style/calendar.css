@@ -129,3 +129,89 @@
  background-size: 8px; 
 
 }
+
+
+
+/* Style the popup header */
+.rbc-overlay-header {
+  font-weight: 600;
+  margin-bottom: 10px;
+  font-size: 14px;
+  color: #333;
+}
+
+
+.rbc-row-content {
+  max-height: none;  /* or 3.5em, depending on font size */
+  overflow: visible;
+}
+.rbc-event-content {
+  width: 100% !important;
+  display: block !important;
+  white-space: normal !important;
+}
+.rbc-row-segment {
+  width: 100% !important;
+  display: flex !important;
+  flex-direction: column;
+  align-items: center;
+}
+
+.rbc-event-label {
+  display: none !important; /* Hides the default time label */
+}
+
+
+.rbc-event {
+  display: block !important;
+  white-space: normal !important;
+  word-break: break-word !important;
+  overflow: hidden;
+  font-size: 0.75rem !important;
+  padding: 2px 3px !important;
+  line-height: 1.2;
+  margin-bottom: 2px !important;
+  border-radius: 4px;
+  position: relative;
+  width: 90% !important;
+}
+/* Place this in your CSS file or inside a <style> tag */
+
+.rbc-overlay {
+  position: absolute !important;
+  transform: translateY(-100%) !important; 
+  margin-top: -10px !important;           
+  z-index: 9999;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+}
+
+
+.rbc-show-more {
+  display: block;
+  font-size: 0.75rem;
+  margin-top: 4px;
+  text-align: center;
+  color: #1b263b;
+  font-weight: 500;
+  cursor: pointer;
+  z-index: 10;
+  position: relative;
+}
+
+/* Optional: Improve popup style */
+.rbc-overlay {
+  background-color: #fff;
+  border-radius: 8px;
+  padding: 12px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+  z-index: 1000;
+  max-width: 280px;
+}
+
+.rbc-month-view {
+  line-height: 1.1 !important;
+  min-height: 95%;
+}
+.rbc-date-cell {
+  padding: 2px 4px !important;
+} 
