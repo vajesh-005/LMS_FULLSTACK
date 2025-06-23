@@ -76,14 +76,24 @@ function Request_form(props) {
 
   const handleChange = (event) => {
     const { name, value } = event.target;
-
+  
     const numericFields = ["leave_type_id", "start_day_type", "end_day_type"];
-
-    setFormData((prev) => ({
-      ...prev,
-      [name]: numericFields.includes(name) ? parseInt(value, 10) : value,
-    }));
+    const parsedValue = numericFields.includes(name) ? parseInt(value, 10) : value;
+  
+    setFormData((prev) => {
+      const updated = { ...prev, [name]: parsedValue };
+  
+      // Auto-update end_day_type if it's a single-day leave
+      const isSingleDay = updated.start_date && updated.end_date && updated.start_date === updated.end_date;
+  
+      if (isSingleDay && name === "start_day_type") {
+        updated.end_day_type = parsedValue;
+      }
+  
+      return updated;
+    });
   };
+  
 
   const isFormValid = () =>
     formData.start_date &&
@@ -136,7 +146,7 @@ function Request_form(props) {
         });
       } else {
         toaster.push(
-          <Message type="error" closable duration={3000}>
+          <Message type="success" closable duration={1500}>
             {responseData.message || "Something went wrong."}
           </Message>,
           { placement: "topEnd" }
@@ -145,7 +155,7 @@ function Request_form(props) {
       }
     } catch (error) {
       toaster.push(
-        <Message type="error" closable duration={3000}>
+        <Message type="error" closable duration={1500}>
           {error.message}
         </Message>,
         { placement: "topEnd" }
@@ -256,7 +266,7 @@ function Request_form(props) {
                       </option>
                     )}
                     <option value={0}>Full day</option>
-                    <option value={1}>First half</option>
+                    <option value={1}  disabled={formData.start_date !== formData.end_date}>First half</option>
                     <option value={2}>Second half</option>
                   </select>
 
@@ -273,7 +283,7 @@ function Request_form(props) {
                     )}
                     <option value={0}>Full day</option>
                     <option value={1}>First half</option>
-                    <option value={2}>Second half</option>
+                    <option value={2}  disabled={formData.start_date !== formData.end_date}>Second half</option>
                   </select>
                 </>
               )}

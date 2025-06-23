@@ -81,7 +81,6 @@ function Latest_requests(props) {
     fetchAll();
   }, [props.id, props.refreshKey, refresh]);
 
-  
   return (
     <div className="pending-section">
       <p className="title">Latest Leaves</p>
@@ -152,20 +151,17 @@ function Latest_requests(props) {
                   new Date(item.start_date).toLocaleDateString("en-GB")}
               </div>
               <div className="date-difference">
-                {calculateLeaveDays(
-                  item.start_date,
-                  item.end_date,
-                  item.start_day_type,
-                  item.end_day_type
-                ) +
-                  (calculateLeaveDays(
+                {(() => {
+                  const days = calculateLeaveDays(
                     item.start_date,
                     item.end_date,
                     item.start_day_type,
                     item.end_day_type
-                  ) > 1
-                    ? " Days"
-                    : " Day")}
+                  );
+
+                  if (days === 0.5) return "Half Day";
+                  return `${days} ${days > 1 ? "Days" : "Day"}`;
+                })()}
               </div>
               <div className="date">
                 {item.end_date &&
@@ -239,38 +235,41 @@ function Latest_requests(props) {
                       <div>
                         {/* Leave Duration */}
                         <div>
-                          {calculateLeaveDays(
-                            selectedLeaveData.start_date,
-                            selectedLeaveData.end_date,
-                            selectedLeaveData.start_day_type,
-                            selectedLeaveData.end_day_type
-                          ) +
-                            (calculateLeaveDays(
-                              selectedLeaveData.start_date,
-                              selectedLeaveData.end_date,
-                              selectedLeaveData.start_day_type,
-                              selectedLeaveData.end_day_type
-                            ) > 1
-                              ? " Days"
-                              : " Day")}
+                          {(() => {
+                  const days = calculateLeaveDays(
+                    selectedLeaveData.start_date,
+                    selectedLeaveData.end_date,
+                    selectedLeaveData.start_day_type,
+                    selectedLeaveData.end_day_type
+                  );
+
+                  if (days === 0.5) return "Half Day";
+                  return `${days} ${days > 1 ? "Days" : "Day"}`;
+                })()}
 
                           {(selectedLeaveData.start_day_type !== 0 ||
                             selectedLeaveData.end_day_type !== 0) && (
-                            <span className="duration-indication">
+                              <span className="duration-indication">
                               {" ("}
-                              {selectedLeaveData.start_day_type === 1 &&
+                              {selectedLeaveData.start_day_type === selectedLeaveData.end_day_type &&
+                                selectedLeaveData.start_day_type === 1 &&
                                 "1st of Start"}
-                              {selectedLeaveData.start_day_type === 2 &&
+                              {selectedLeaveData.start_day_type === selectedLeaveData.end_day_type &&
+                                selectedLeaveData.start_day_type === 2 &&
                                 "2nd of Start"}
-                              {selectedLeaveData.start_day_type !== 0 &&
-                                selectedLeaveData.end_day_type !== 0 &&
-                                " → "}
-                              {selectedLeaveData.end_day_type === 1 &&
-                                "1st of End"}
-                              {selectedLeaveData.end_day_type === 2 &&
-                                "2nd of End"}
+                            
+                              {selectedLeaveData.start_day_type !== selectedLeaveData.end_day_type && (
+                                <>
+                                  {selectedLeaveData.start_day_type === 1 && "1st of Start"}
+                                  {selectedLeaveData.start_day_type === 2 && "2nd of Start"}
+                                  {" → "}
+                                  {selectedLeaveData.end_day_type === 1 && "1st of End"}
+                                  {selectedLeaveData.end_day_type === 2 && "2nd of End"}
+                                </>
+                              )}
                               {")"}
                             </span>
+                            
                           )}
                         </div>
                       </div>
@@ -306,7 +305,6 @@ function Latest_requests(props) {
                       {status_code[selectedLeaveData.status]}
                       {selectedLeaveData.status === 300 &&
                         selectedLeaveData.approvals.some(
-                          //some return the boolean value if the condition passed
                           (app) => app.status === 300 && app.comment
                         ) && (
                           <Whisper

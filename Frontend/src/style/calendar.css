@@ -132,7 +132,6 @@
 
 
 
-/* Style the popup header */
 .rbc-overlay-header {
   font-weight: 600;
   margin-bottom: 10px;
@@ -142,7 +141,7 @@
 
 
 .rbc-row-content {
-  max-height: none;  /* or 3.5em, depending on font size */
+  max-height: none;  
   overflow: visible;
 }
 .rbc-event-content {
@@ -158,7 +157,7 @@
 }
 
 .rbc-event-label {
-  display: none !important; /* Hides the default time label */
+  display: none !important;
 }
 
 
@@ -175,7 +174,6 @@
   position: relative;
   width: 90% !important;
 }
-/* Place this in your CSS file or inside a <style> tag */
 
 .rbc-overlay {
   position: absolute !important;
